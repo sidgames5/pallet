@@ -1,3 +1,5 @@
+import Database from "../../utils/Database";
+
 function Explorer() {
     return (
         <table className="search-results w-full text-left rtl:text-right">
@@ -13,24 +15,15 @@ function Explorer() {
                 </tr>
             </thead>
             <tbody className="*:border-gray-700 *:border-b-2 *:border-l-2 *:border-r-2">
-                <tr>
-                    <td>1</td>
-                    <td>Test</td>
-                    <td>Unknown</td>
-                    <td>Warehouse A</td>
-                    <td>Storage Room</td>
-                    <td>A7</td>
-                    <td>15</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Test</td>
-                    <td>Unknown</td>
-                    <td>Warehouse A</td>
-                    <td>Storage Room</td>
-                    <td>A7</td>
-                    <td>15</td>
-                </tr>
+                {Database.read().items.map((item) => <tr>
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td>{item.status}</td>
+                    <td>{Database.resolveLocations(item.id).building}</td>
+                    <td>{Database.resolveLocations(item.id).area}</td>
+                    <td>{Database.resolveLocations(item.id).shelf}</td>
+                    <td>{item.slot}</td>
+                </tr>)}
             </tbody>
         </table>
     );
