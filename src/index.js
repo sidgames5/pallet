@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './pages/Layout';
 import Dashboard from './pages/Dashboard';
+import NoPage from './pages/NoPage';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -13,6 +14,7 @@ root.render(
             <Route path="/" element={<Layout />}>
                 <Route index element={<Dashboard />} />
             </Route>
+            <Route path="*" element={<NoPage />} />
         </Routes>
     </BrowserRouter>
 );
