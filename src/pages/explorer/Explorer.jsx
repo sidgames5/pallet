@@ -7,7 +7,7 @@ function Explorer() {
                     <th>Name</th>
                     <th>Status</th>
                     <th>Building</th>
-                    <th>Room</th>
+                    <th>Area</th>
                     <th>Shelf</th>
                     <th>Slot</th>
                 </tr>
