@@ -30,7 +30,7 @@ const Dashboard = () => {
         }
     ];
     return (
-        <>
+        <div className="grid grid-cols-2 gap-y-10">
             <div className="recent-activity flex flex-col items-center">
                 <h4>Recent Activity</h4>
                 <div className="flex flex-row flex-wrap items-center text-center justify-center gap-5 max-w-7xl">
@@ -93,7 +93,7 @@ const Dashboard = () => {
                     </a>) : <span className="italic">No recent activity</span>}
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
