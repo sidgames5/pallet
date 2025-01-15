@@ -48,7 +48,7 @@ const Dashboard = () => {
                         l.splice(maxLength);
                         return l;
                     })(recentActivity).map((item) => <a href={`/explorer/${item.type}/${item.id}`} className="flex flex-col items-center justify-center w-48 h-24 rounded-lg bg-gray-300">
-                        <FontAwesomeIcon className="size-10 text-gray-500" icon={(function (type) {
+                        <FontAwesomeIcon className="size-10 text-gray-700" icon={(function (type) {
                             switch (type) {
                                 case "item":
                                     return faBox;
