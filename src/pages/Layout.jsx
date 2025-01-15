@@ -7,7 +7,7 @@ import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 const Layout = () => {
     const links = [
         ["/", "Dashboard"],
-        ["/settings", "Settings"]
+        ["/explorer", "Explorer"]
     ];
     const [inNavMenu, setInNavMenu] = useState(false);
     return (

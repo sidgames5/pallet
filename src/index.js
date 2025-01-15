@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './pages/Layout';
 import Dashboard from './pages/Dashboard';
 import NoPage from './pages/NoPage';
+import LayoutExplorer from './pages/explorer/Layout';
+import Explorer from './pages/explorer/Explorer';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -13,6 +15,9 @@ root.render(
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route index element={<Dashboard />} />
+                <Route path="explorer" element={<LayoutExplorer />}>
+                    <Route index element={<Explorer />} />
+                </Route>
             </Route>
             <Route path="*" element={<NoPage />} />
         </Routes>

@@ -73,17 +73,17 @@ const Dashboard = () => {
 
                             const formatter = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
 
-                            if (days > 365) {
+                            if (days >= 365) {
                                 return formatter.format(Math.round(-days / 365), "year");
-                            } else if (days > 30) {
+                            } else if (days >= 30) {
                                 return formatter.format(Math.round(-days / 30), "month");
-                            } else if (days > 1) {
+                            } else if (days >= 1) {
                                 return formatter.format(Math.round(-days), "day");
-                            } else if (hours > 1) {
+                            } else if (hours >= 1) {
                                 return formatter.format(Math.round(-hours), "hour");
-                            } else if (minutes > 1) {
+                            } else if (minutes >= 1) {
                                 return formatter.format(Math.round(-minutes), "minute");
-                            } else if (seconds > 1) {
+                            } else if (seconds >= 1) {
                                 return formatter.format(Math.round(-seconds), "second");
                             } else {
                                 return "just now";
