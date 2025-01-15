@@ -25,6 +25,24 @@ class Database {
                 area: 3,
                 building: 4,
                 slot: 15
+            },{
+                type: "item",
+                name: "A box",
+                id: 5,
+                status: "Checked out",
+                shelf: 2,
+                area: 3,
+                building: 4,
+                slot: 17
+            },{
+                type: "item",
+                name: "Another box",
+                id: 6,
+                status: "Available",
+                shelf: 2,
+                area: 3,
+                building: 4,
+                slot: 18
             }]
         };
     }
@@ -39,7 +57,6 @@ class Database {
 
         let item = null;
         for (const element of Database.read().items) {
-            console.log(element);
             if (element.id === itemId) {
                 item = element;
                 buildingId = item.building;
