@@ -1,8 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Database from "../../utils/Database";
-import NoPage from "../../NoPage";
+import NoPage from "../NoPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDoorOpen, faPallet, faWarehouse } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faDoorOpen, faPallet, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 
 function Info() {
     const { objectType, objectId } = useParams();
@@ -11,28 +11,28 @@ function Info() {
         switch (type) {
             case "item":
                 for (const v of db.items) {
-                    if (v.id === id) {
+                    if (v.id === parseInt(id)) {
                         return v;
                     }
                 }
                 break;
             case "building":
                 for (const v of db.buildings) {
-                    if (v.id === id) {
+                    if (v.id === parseInt(id)) {
                         return v;
                     }
                 }
                 break;
-            case "room":
-                for (const v of db.rooms) {
-                    if (v.id === id) {
+            case "area":
+                for (const v of db.areas) {
+                    if (v.id === parseInt(id)) {
                         return v;
                     }
                 }
                 break;
             case "shelf":
                 for (const v of db.shelves) {
-                    if (v.id === id) {
+                    if (v.id === parseInt(id)) {
                         return v;
                     }
                 }
@@ -42,14 +42,31 @@ function Info() {
         }
         return null;
     })(objectType, objectId);
-    return (object == null) ? <NoPage /> : (<div className="w-full flex flex-col">
-        <h1>{String(objectType).charAt(0).toUpperCase() + String(objectType).slice(1)} {objectId}: {object.name}</h1>
-        <div className="flex flex-row">
-            {objectType === "item" ? <span className="inline-block p-4 bg-gray-700 text-white">{object.status}</span> : ""}
-            {objectType === "room" | "shelf" | "item" ? <span className="inline-block p-4 bg-gray-700"><FontAwesomeIcon icon={faWarehouse} />{object.building}</span> : ""}
-            {objectType === "shelf" | "item" ? <span className="inline-block p-4 bg-gray-700"><FontAwesomeIcon icon={faDoorOpen} />{object.room}</span> : ""}
-            {objectType === "item" ? <span className="inline-block p-4 bg-gray-700"><FontAwesomeIcon icon={faPallet} />{object.shelf}</span> : ""}
-            {objectType === "item" ? <span className="inline-block p-4 bg-gray-700">Slot {object.slot}</span> : ""}
+
+    const navigate = useNavigate();
+
+    const locations = Database.resolveLocations(object.id);
+
+    return (object == null) ? <NoPage /> : (<div className="w-full flex flex-col justify-center items-center">
+        <div className="flex flex-row gap-4 items-center">
+            <FontAwesomeIcon icon={faArrowLeft} className="size-8 p-2 bg-gray-700 rounded-full text-white cursor-pointer transition-all duration-300 hover:p-2.5" onClick={() => navigate(-1)} />
+            <h3>{String(objectType).charAt(0).toUpperCase() + String(objectType).slice(1)} {objectId}: {object.name}</h3>
+        </div>
+        <div className="flex flex-row *:m-2 *:rounded-full *:p-2">
+            {objectType === "item" ? <span className={`inline-block ${(function (status) {
+                switch (status.replace(" ", "").toLocaleLowerCase()) {
+                    case "checkedout":
+                        return "bg-red-700";
+                    case "available":
+                        return "bg-green-700";
+                    default:
+                        return "bg-gray-700";
+                }
+            })(object.status)} text-white`}>{object.status}</span> : ""}
+            {["area", "shelf", "item"].includes(objectType) ? <span className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faWarehouse} />{locations.building}</span> : ""}
+            {["shelf", "item"].includes(objectType) ? <span className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faDoorOpen} />{locations.area}</span> : ""}
+            {objectType === "item" ? <span className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faPallet} />{locations.shelf}</span> : ""}
+            {objectType === "item" ? <span className="inline-block bg-gray-700 text-white">Slot {object.slot}</span> : ""}
         </div>
         <div className="grid grid-cols-2 gap-y-10">
             <div>

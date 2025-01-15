@@ -18,10 +18,10 @@ root.render(
                 <Route index element={<Dashboard />} />
                 <Route path="explorer" element={<LayoutExplorer />}>
                     <Route index element={<Explorer />} />
-                    <Route path="item" element={<NoPage />}/>
-                    <Route path="buulding" element={<NoPage />}/>
-                    <Route path="area" element={<NoPage />}/>
-                    <Route path="shelf" element={<NoPage />}/>
+                    <Route path="item" element={<NoPage />} />
+                    <Route path="buulding" element={<NoPage />} />
+                    <Route path="area" element={<NoPage />} />
+                    <Route path="shelf" element={<NoPage />} />
                     <Route path=":objectType/:objectId" element={<Info />} />
                 </Route>
             </Route>
