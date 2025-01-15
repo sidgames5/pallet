@@ -67,7 +67,7 @@ function Explorer() {
                 </tbody>
             </table>
 
-            <FontAwesomeIcon className="fixed bottom-5 right-5 size-10 p-4 bg-gray-700 text-white rounded-full cursor-pointer hover:m-1 transition-all duration-300" icon={faPlus} />
+            <FontAwesomeIcon className="fixed bottom-5 right-5 size-10 p-4 bg-gray-700 text-white rounded-full cursor-pointer hover:bg-sky-600 transition-all duration-300" icon={faPlus} />
         </>
     );
 }

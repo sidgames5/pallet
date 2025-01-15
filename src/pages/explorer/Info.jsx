@@ -49,7 +49,7 @@ function Info() {
 
     return (object == null) ? <NoPage /> : (<div className="w-full flex flex-col justify-center items-center">
         <div className="flex flex-row gap-4 items-center">
-            <FontAwesomeIcon icon={faArrowLeft} className="size-8 p-2 bg-gray-700 rounded-full text-white cursor-pointer transition-all duration-300 hover:p-2.5" onClick={() => navigate(-1)} />
+            <FontAwesomeIcon icon={faArrowLeft} className="size-8 p-2 bg-gray-700 rounded-full text-white cursor-pointer transition-all duration-300 hover:bg-sky-600" onClick={() => navigate(-1)} />
             <h3>{String(objectType).charAt(0).toUpperCase() + String(objectType).slice(1)} {objectId}: {object.name}</h3>
         </div>
         <div className="flex flex-row *:m-2 *:rounded-full *:p-2">
