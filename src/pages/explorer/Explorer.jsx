@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Database from "../../utils/Database";
 import { Link } from "react-router-dom";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import "./explorer.scss";
 
 function Explorer() {
     return (

@@ -69,11 +69,22 @@ function Info() {
             {objectType === "item" ? <span className="inline-block bg-gray-700 text-white">Slot {object.slot}</span> : ""}
         </div>
         <div className="grid grid-cols-2 gap-y-10">
-            <div>
+            <div className="flex flex-col justify-center items-center">
                 {/* TODO: History */}
             </div>
-            <div>
-                {/* TODO: Actions */}
+            <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-row *:p-2 *:rounded-full *:m-1">
+                    {object.status.replace(" ", "").toLocaleLowerCase() !== "available" ? <button className="bg-green-700 text-white">Check in</button> : ""}
+                    {object.status.replace(" ", "").toLocaleLowerCase() !== "checkedout" ? <button className="bg-blue-700 text-white">Check out</button> : ""}
+                    <button className="bg-red-700 text-white">Delete</button>
+                </div>
+                <form className="flex flex-col justify-center items-center mt-4">
+                    <div className="flex flex-row items-center">
+                        <label htmlFor="name">Name: </label>
+                        <input type="text" name="name" id="name" value={object.name} />
+                    </div>
+                    <button type="submit" className="bg-gray-700 p-2 rounded-full text-white mt-4 hover:bg-sky-600 transition-all duration-300">Update</button>
+                </form>
             </div>
         </div>
     </div>);
