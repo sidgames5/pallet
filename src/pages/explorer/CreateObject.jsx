@@ -1,7 +1,10 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 
 function CreateObject(props) {
+    const [showSlotInput, setShowSlotInput] = useState(true);
+
     return (
         <div className="bg-gray-300 p-8 rounded-lg fixed flex flex-col justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <div className="flex flex-row items-center align-middle justify-center">
@@ -14,7 +17,7 @@ function CreateObject(props) {
             }}>
                 <div className="flex flex-row align-middle">
                     <label htmlFor="type">Type: </label>
-                    <select name="type" id="type">
+                    <select name="type" id="type" onChange={(e) => setShowSlotInput(e.target.value === "item")}>
                         <option value="item">Item</option>
                         <option value="shelf">Shelf</option>
                         <option value="area">Area</option>
@@ -25,10 +28,10 @@ function CreateObject(props) {
                     <label htmlFor="name">Name: </label>
                     <input type="text" name="name" id="name" />
                 </div>
-                <div className="flex flex-row align-middle">
+                {showSlotInput && <div className="flex flex-row align-middle">
                     <label htmlFor="slot">Slot: </label>
                     <input type="number" name="slot" id="slot" />
-                </div>
+                </div>}
                 <button type="submit" className="p-2 rounded-full bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Create</button>
             </form>
         </div>
