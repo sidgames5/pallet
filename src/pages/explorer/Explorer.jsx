@@ -3,22 +3,30 @@ import Database from "../../utils/Database";
 import { Link, useSearchParams } from "react-router-dom";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import CreateObject from "./CreateObject";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import LocationsRow from "./LocationsRow";
 
 function Explorer() {
     const [searchParams] = useSearchParams();
-    const items = [];
-    const db = Database.read();
-    for (const v of db.items) {
-        if (v.building === parseInt(searchParams.get("building")) || !searchParams.has("building")) {
-            if (v.area === parseInt(searchParams.get("area")) || !searchParams.has("area")) {
-                if (v.shelf === parseInt(searchParams.get("shelf")) || !searchParams.has("shelf")) {
-                    items.push(v);
-                    console.log(searchParams.get("building"));
-                }
+
+    const [items, setItems] = useState([]);
+    useEffect(() => {
+        async function fetchAndProcessItems() {
+            try {
+                const db = await Database.read();
+                const filteredItems = db.items.filter(v =>
+                    (!searchParams.has("building") || v.building === parseInt(searchParams.get("building"))) &&
+                    (!searchParams.has("area") || v.area === parseInt(searchParams.get("area"))) &&
+                    (!searchParams.has("shelf") || v.shelf === parseInt(searchParams.get("shelf")))
+                );
+                setItems(filteredItems);
+            } catch (error) {
+                console.error("Error fetching or processing items:", error);
+                setItems([]);
             }
         }
-    }
+        fetchAndProcessItems();
+    }, [searchParams]);
 
     const [showCreateObjectModal, setShowCreateObjectModal] = useState(false);
 
@@ -49,7 +57,7 @@ function Explorer() {
                                 default:
                                     return "bg-gray-700";
                             }
-                        })(item.status)} text-white p-1 rounded-full`} onChange={console.log("changed!")}>{(function (status) {
+                        })(item.status)} text-white p-1 rounded-full`}>{(function (status) {
                             const options = [];
                             const defaults = ["available", "checkedout", "unknown"]
                             options.push(status.toLocaleLowerCase().replace(" ", ""));
@@ -77,9 +85,7 @@ function Explorer() {
 
                             return things;
                         })(item.status)}</select></td>
-                        <td><Link to={`/explorer/building/${item.building}`}>{Database.resolveLocations(item).building}</Link></td>
-                        <td><Link to={`/explorer/area/${item.area}`}>{Database.resolveLocations(item).area}</Link></td>
-                        <td><Link to={`/explorer/shelf/${item.shelf}`}>{Database.resolveLocations(item).shelf}</Link></td>
+                        <LocationsRow item={item} />
                         <td>{item.slot}</td>
                     </tr>)}
                 </tbody>

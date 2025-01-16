@@ -1,53 +1,16 @@
+import axios from "axios";
+
 class Database {
-    static read() {
-        return {
-            buildings: [{
-                type: "building",
-                name: "Warehouse A",
-                id: 4
-            }],
-            areas: [{
-                type: "area",
-                name: "Storage Room",
-                id: 3,
-                building: 4
-            }],
-            shelves: [{
-                type: "shelf",
-                name: "A7",
-                id: 2,
-                area: 3,
-                building: 4
-            }],
-            items: [{
-                type: "item",
-                name: "Test",
-                id: 1,
-                status: "Unknown",
-                shelf: 2,
-                area: 3,
-                building: 4,
-                slot: 15
-            }, {
-                type: "item",
-                name: "A box",
-                id: 5,
-                status: "Checked out",
-                shelf: 2,
-                area: 3,
-                building: 4,
-                slot: 17
-            }, {
-                type: "item",
-                name: "Another box",
-                id: 6,
-                status: "Available",
-                shelf: 2,
-                area: 3,
-                building: 4,
-                slot: 18
-            }]
-        };
+    static async read() {
+        let data = {};
+        try {
+            const res = await axios.get("/api/read");
+            data = res.data;
+            return data;
+        } catch (error) {
+            console.error("Error: ", error);
+            throw error;
+        }
     }
 
     static resolveLocations(obj) {
@@ -63,32 +26,34 @@ class Database {
         areaId = item.area;
         shelfId = item.shelf;
 
-        for (const element of Database.read().buildings) {
-            if (element.id === buildingId) {
-                building = element.name;
+        return Database.read().then((db) => {
+            for (const element of db.buildings) {
+                if (element.id === buildingId) {
+                    building = element.name;
+                }
             }
-        }
 
-        for (const element of Database.read().areas) {
-            if (element.id === areaId) {
-                area = element.name;
+            for (const element of db.areas) {
+                if (element.id === areaId) {
+                    area = element.name;
+                }
             }
-        }
 
-        for (const element of Database.read().shelves) {
-            if (element.id === shelfId) {
-                shelf = element.name;
+            for (const element of db.shelves) {
+                if (element.id === shelfId) {
+                    shelf = element.name;
+                }
             }
-        }
 
-        return {
-            building: building,
-            buildingId: buildingId,
-            area: area,
-            areaId: areaId,
-            shelf: shelf,
-            shelfId: shelfId
-        };
+            return {
+                building: building,
+                buildingId: buildingId,
+                area: area,
+                areaId: areaId,
+                shelf: shelf,
+                shelfId: shelfId
+            };
+        });
     }
 }
 

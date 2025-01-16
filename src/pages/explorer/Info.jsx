@@ -3,11 +3,47 @@ import Database from "../../utils/Database";
 import NoPage from "../NoPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faDoorOpen, faPallet, faWarehouse } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
 
 function Info() {
     const { objectType, objectId } = useParams();
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+    const [db, setDb] = useState({
+        buildings: [],
+        areas: [],
+        shelves: [],
+        items: []
+    });
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchData = async () => {
+            try {
+                const data = await Database.read();
+                if (isMounted) {
+                    setDb(data);
+                    // setIsLoading(false);
+                }
+            } catch (e) {
+                console.error("Error: ", e);
+                if (isMounted) {
+                    // setIsLoading(false);
+                }
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    // const locations = Database.resolveLocations(object); 
+
+
     let object = (function (type, id) {
-        const db = Database.read();
         switch (type) {
             case "item":
                 for (const v of db.items) {
@@ -43,9 +79,35 @@ function Info() {
         return null;
     })(objectType, objectId);
 
-    const navigate = useNavigate();
+    const [locations, setLocations] = useState({});
+    useEffect(() => {
+        let isMounted = true;
 
-    const locations = Database.resolveLocations(object);
+        const fetchData = async () => {
+            try {
+                const data = await Database.resolveLocations(object);
+                if (isMounted) {
+                    setLocations(data);
+                    setIsLoading(false);
+                }
+            } catch (e) {
+                console.error("Error: ", e);
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [object]);
+
+    if (isLoading) {
+        return <div>Loading</div>;
+    }
 
     return (object == null) ? <NoPage /> : (<div className="w-full flex flex-col justify-center items-center">
         <div className="flex flex-row gap-4 items-center">
@@ -70,17 +132,17 @@ function Info() {
         </div>
         <div className="grid grid-cols-2 gap-y-10">
             {objectType !== "item" ? <div className="flex flex-col justify-center items-center overflow-y-auto text-wrap">
-                {(function(){
+                {(function () {
                     let parentObject = null;
                     switch (objectType) {
                         case "building":
-                            parentObject = Database.read().areas;
+                            parentObject = db.areas;
                             break;
                         case "area":
-                            parentObject = Database.read().shelves;
+                            parentObject = db.shelves;
                             break;
                         case "shelf":
-                            parentObject = Database.read().items;
+                            parentObject = db.items;
                             break;
                         default:
                             return <p>Error</p>

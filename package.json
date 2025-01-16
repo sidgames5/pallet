@@ -1,7 +1,8 @@
 {
     "name": "pallet",
-    "version": "0.1.0",
+    "version": "1.0.0-dev",
     "private": true,
+    "proxy": "http://localhost:5000/",
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
@@ -9,6 +10,7 @@
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
+        "axios": "^1.7.9",
         "motion": "^11.18.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
