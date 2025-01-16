@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Database from "../../utils/Database";
 import { Link, useSearchParams } from "react-router-dom";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import CreateObject from "./CreateObject";
+import { useState } from "react";
 
 function Explorer() {
     const [searchParams] = useSearchParams();
@@ -17,6 +19,9 @@ function Explorer() {
             }
         }
     }
+
+    const [showCreateObjectModal, setShowCreateObjectModal] = useState(false);
+
     return (
         <>
             <table className="search-results w-full text-left rtl:text-right">
@@ -80,7 +85,12 @@ function Explorer() {
                 </tbody>
             </table>
 
-            <FontAwesomeIcon className="fixed bottom-5 right-5 size-10 p-4 bg-gray-700 text-white rounded-full cursor-pointer hover:bg-sky-600 transition-all duration-300" icon={faPlus} />
+            <FontAwesomeIcon className="fixed bottom-5 right-5 size-10 p-4 bg-gray-700 text-white rounded-full cursor-pointer hover:bg-sky-600 transition-all duration-300" icon={faPlus} onClick={() => setShowCreateObjectModal(true)} />
+            {showCreateObjectModal && <CreateObject
+                onClose={() => setShowCreateObjectModal(false)}
+                onSubmit={() => {
+                    alert("hi");
+                }} />}
         </>
     );
 }
