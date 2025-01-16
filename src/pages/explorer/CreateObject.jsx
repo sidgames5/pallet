@@ -5,7 +5,7 @@ function CreateObject(props) {
     return (
         <div className="bg-gray-300 p-8 rounded-lg fixed flex flex-col justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <div className="flex flex-row items-center align-middle justify-center">
-                <FontAwesomeIcon className="mr-4 p-2 size-4 bg-gray-700 rounded-full text-white hover:bg-sky-600 transition-all duration-300" icon={faClose} onClick={props.onClose} />
+                <FontAwesomeIcon className="mr-4 p-2 size-4 bg-gray-700 rounded-full text-white hover:bg-sky-600 transition-all duration-300 cursor-pointer" icon={faClose} onClick={props.onClose} />
                 <h6>Create new entry</h6>
             </div>
             <form className="flex flex-col items-center justify-center gap-1 mt-1" onSubmit={(e) => {
