@@ -94,6 +94,9 @@ const Dashboard = () => {
                     </Link>) : <span className="italic">No recent activity</span>}
                 </div>
             </div>
+            <div>
+                
+            </div>
         </div>
     );
 };
