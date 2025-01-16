@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Database from "../../utils/Database";
 import NoPage from "../NoPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -63,15 +63,33 @@ function Info() {
                         return "bg-gray-700";
                 }
             })(object.status)} text-white`}>{object.status}</span> : ""}
-            {["area", "shelf", "item"].includes(objectType) ? <span className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faWarehouse} />{locations.building}</span> : ""}
-            {["shelf", "item"].includes(objectType) ? <span className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faDoorOpen} />{locations.area}</span> : ""}
-            {objectType === "item" ? <span className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faPallet} />{locations.shelf}</span> : ""}
+            {["area", "shelf", "item"].includes(objectType) ? <Link to={`/explorer/building/${locations.buildingId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faWarehouse} />{locations.building}</Link> : ""}
+            {["shelf", "item"].includes(objectType) ? <Link to={`/explorer/area/${locations.areaId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faDoorOpen} />{locations.area}</Link> : ""}
+            {objectType === "item" ? <Link to={`/explorer/shelf/${locations.shelfId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faPallet} />{locations.shelf}</Link> : ""}
             {objectType === "item" ? <span className="inline-block bg-gray-700 text-white">Slot {object.slot}</span> : ""}
         </div>
         <div className="grid grid-cols-2 gap-y-10">
-            <div className="flex flex-col justify-center items-center">
-                {/* TODO: History */}
-            </div>
+            {objectType !== "item" ? <div className="flex flex-col justify-center items-center overflow-y-auto text-wrap">
+                {(function(){
+                    let parentObject = null;
+                    switch (objectType) {
+                        case "building":
+                            parentObject = Database.read().areas;
+                            break;
+                        case "area":
+                            parentObject = Database.read().shelves;
+                            break;
+                        case "shelf":
+                            parentObject = Database.read().items;
+                            break;
+                        default:
+                            return <p>Error</p>
+                    }
+                    return parentObject.map((child) => <Link to={`/explorer/${child.type}/${child.id}`}>
+                        <span>{child.name}</span>
+                    </Link>);
+                })()}
+            </div> : ""}
             <div className="flex flex-col justify-center items-center">
                 <div className="flex flex-row *:p-2 *:rounded-full *:m-1">
                     {objectType === "item" ? (function () {

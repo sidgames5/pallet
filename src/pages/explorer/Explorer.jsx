@@ -1,9 +1,22 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Database from "../../utils/Database";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function Explorer() {
+    const [searchParams] = useSearchParams();
+    const items = [];
+    const db = Database.read();
+    for (const v of db.items) {
+        if (v.building === parseInt(searchParams.get("building")) || !searchParams.has("building")) {
+            if (v.area === parseInt(searchParams.get("area")) || !searchParams.has("area")) {
+                if (v.shelf === parseInt(searchParams.get("shelf")) || !searchParams.has("shelf")) {
+                    items.push(v);
+                    console.log(searchParams.get("building"));
+                }
+            }
+        }
+    }
     return (
         <>
             <table className="search-results w-full text-left rtl:text-right">
@@ -19,7 +32,7 @@ function Explorer() {
                     </tr>
                 </thead>
                 <tbody className="*:border-gray-700 *:border-b-2 *:border-l-2 *:border-r-2">
-                    {Database.read().items.map((item) => <tr>
+                    {items.map((item) => <tr>
                         <td><Link to={`/explorer/item/${item.id}`}>{item.id}</Link></td>
                         <td><Link to={`/explorer/item/${item.id}`}>{item.name}</Link></td>
                         <td><select className={`inline-block ${(function (status) {

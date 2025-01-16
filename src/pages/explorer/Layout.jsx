@@ -1,5 +1,6 @@
 import { Outlet, NavLink } from "react-router-dom";
 import "./explorer.scss";
+import Database from "../../utils/Database";
 
 const Layout = () => {
     return (
@@ -8,19 +9,19 @@ const Layout = () => {
                 <div className="flex flex-col items-center">
                     <label htmlFor="building">Building</label>
                     <select name="building" id="building">
-                        <option value="4">Warehouse A</option>
+                        {Database.read().buildings.map((object) => <option value={object.id}>{object.name}</option>)}
                     </select>
                 </div>
                 <div className="flex flex-col items-center">
-                    <label htmlFor="room">Room</label>
-                    <select name="room" id="room">
-                        <option value="3">Storage Room</option>
+                    <label htmlFor="area">Room</label>
+                    <select name="area" id="area">
+                        {Database.read().areas.map((object) => <option value={object.id}>{object.name}</option>)}
                     </select>
                 </div>
                 <div className="flex flex-col items-center">
                     <label htmlFor="shelf">Shelf</label>
                     <select name="shelf" id="shelf">
-                        <option value="2">A7</option>
+                        {Database.read().shelves.map((object) => <option value={object.id}>{object.name}</option>)}
                     </select>
                 </div>
                 <button type="submit" className="p-4 bg-gray-700 rounded-lg text-white transition-all duration-300 hover:bg-sky-600">Search</button>
