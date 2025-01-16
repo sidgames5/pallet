@@ -2,6 +2,8 @@ import { Outlet, NavLink } from "react-router-dom";
 import "./explorer.scss";
 import Database from "../../utils/Database";
 import { useState, useEffect } from "react";
+import SearchFilterForm from "./SearchFilterForm";
+import SearchBarcodeForm from "./SearchBarcodeForm";
 
 const Layout = () => {
     const [buildings, setBuildings] = useState([]);
@@ -46,29 +48,18 @@ const Layout = () => {
         f();
     }, []);
 
+    const [barcodeSearch, setBarcodeSearch] = useState(false);
+
     return (
         <>
-            <form className="search-filters flex flex-row justify-center items-center gap-8 m-4">
-                <div className="flex flex-col items-center">
-                    <label htmlFor="building">Building</label>
-                    <select name="building" id="building">
-                        {buildings.map((object) => <option value={object.id}>{object.name}</option>)}
-                    </select>
+            <div className="flex flex-col mt-4 items-center justify-center">
+                <div className="flex flex-row rounded-full bg-gray-700 *:p-2 text-white w-fit">
+                    <button className={!barcodeSearch && "bg-sky-600 rounded-l-full"} onClick={() => setBarcodeSearch(false)}>Filters</button>
+                    <button className={barcodeSearch && "bg-sky-600 rounded-r-full"} onClick={() => setBarcodeSearch(true)}>Barcode/ID</button>
                 </div>
-                <div className="flex flex-col items-center">
-                    <label htmlFor="area">Room</label>
-                    <select name="area" id="area">
-                        {areas.map((object) => <option value={object.id}>{object.name}</option>)}
-                    </select>
-                </div>
-                <div className="flex flex-col items-center">
-                    <label htmlFor="shelf">Shelf</label>
-                    <select name="shelf" id="shelf">
-                        {shelves.map((object) => <option value={object.id}>{object.name}</option>)}
-                    </select>
-                </div>
-                <button type="submit" className="p-4 bg-gray-700 rounded-lg text-white transition-all duration-300 hover:bg-sky-600">Search</button>
-            </form>
+                {!barcodeSearch && <SearchFilterForm buildings={buildings} areas={areas} shelves={shelves} />}
+                {barcodeSearch && <SearchBarcodeForm />}
+            </div>
 
             <div className="container flex flex-col items-center mx-auto w-full"><Outlet /></div>
         </>
