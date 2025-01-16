@@ -9,12 +9,15 @@ class Database {
             areas: [{
                 type: "area",
                 name: "Storage Room",
-                id: 3
+                id: 3,
+                building: 4
             }],
             shelves: [{
                 type: "shelf",
                 name: "A7",
-                id: 2
+                id: 2,
+                area: 3,
+                building: 4
             }],
             items: [{
                 type: "item",
@@ -25,7 +28,7 @@ class Database {
                 area: 3,
                 building: 4,
                 slot: 15
-            },{
+            }, {
                 type: "item",
                 name: "A box",
                 id: 5,
@@ -34,7 +37,7 @@ class Database {
                 area: 3,
                 building: 4,
                 slot: 17
-            },{
+            }, {
                 type: "item",
                 name: "Another box",
                 id: 6,
@@ -47,7 +50,7 @@ class Database {
         };
     }
 
-    static resolveLocations(itemId) {
+    static resolveLocations(obj) {
         let building = null;
         let buildingId = 0;
         let area = null;
@@ -55,15 +58,10 @@ class Database {
         let shelf = null;
         let shelfId = 0;
 
-        let item = null;
-        for (const element of Database.read().items) {
-            if (element.id === itemId) {
-                item = element;
-                buildingId = item.building;
-                areaId = item.area;
-                shelfId = item.shelf;
-            }
-        }
+        let item = obj;
+        buildingId = item.building;
+        areaId = item.area;
+        shelfId = item.shelf;
 
         for (const element of Database.read().buildings) {
             if (element.id === buildingId) {

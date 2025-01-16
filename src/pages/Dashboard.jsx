@@ -1,5 +1,6 @@
 import { faBox, faDoorOpen, faPallet, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 
 const Dashboard = () => {
@@ -25,13 +26,13 @@ const Dashboard = () => {
         {
             type: "building",
             name: "Warehouse A",
-            timestamp: 1736901576,
+            timestamp: 1736950676,
             id: 4
         }
     ];
     return (
         <div className="grid grid-cols-2 gap-y-10">
-            <div className="recent-activity flex flex-col items-center">
+            <div className="recent-activity flex flex-col items-center justify-center">
                 <h4>Recent Activity</h4>
                 <div className="flex flex-row flex-wrap items-center text-center justify-center gap-5 max-w-7xl">
                     {(recentActivity.length > 0) ? (function (list) {
@@ -47,7 +48,7 @@ const Dashboard = () => {
                         }
                         l.splice(maxLength);
                         return l;
-                    })(recentActivity).map((item) => <a href={`/explorer/${item.type}/${item.id}`} className="flex flex-col items-center justify-center w-48 h-24 rounded-lg bg-gray-300">
+                    })(recentActivity).map((item) => <Link to={`/explorer/${item.type}/${item.id}`} className="flex flex-col items-center justify-center w-48 h-24 rounded-lg bg-gray-300">
                         <FontAwesomeIcon className="size-10 text-gray-700" icon={(function (type) {
                             switch (type) {
                                 case "item":
@@ -90,7 +91,7 @@ const Dashboard = () => {
                             }
 
                         })(item.timestamp * 1000)}</span>
-                    </a>) : <span className="italic">No recent activity</span>}
+                    </Link>) : <span className="italic">No recent activity</span>}
                 </div>
             </div>
         </div>

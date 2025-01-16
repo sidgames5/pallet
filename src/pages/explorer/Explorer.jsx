@@ -59,9 +59,9 @@ function Explorer() {
 
                             return things;
                         })(item.status)}</select></td>
-                        <td><Link to={`/explorer/building/${item.building}`}>{Database.resolveLocations(item.id).building}</Link></td>
-                        <td><Link to={`/explorer/area/${item.area}`}>{Database.resolveLocations(item.id).area}</Link></td>
-                        <td><Link to={`/explorer/shelf/${item.shelf}`}>{Database.resolveLocations(item.id).shelf}</Link></td>
+                        <td><Link to={`/explorer/building/${item.building}`}>{Database.resolveLocations(item).building}</Link></td>
+                        <td><Link to={`/explorer/area/${item.area}`}>{Database.resolveLocations(item).area}</Link></td>
+                        <td><Link to={`/explorer/shelf/${item.shelf}`}>{Database.resolveLocations(item).shelf}</Link></td>
                         <td>{item.slot}</td>
                     </tr>)}
                 </tbody>

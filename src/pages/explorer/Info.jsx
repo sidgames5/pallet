@@ -45,7 +45,7 @@ function Info() {
 
     const navigate = useNavigate();
 
-    const locations = Database.resolveLocations(object.id);
+    const locations = Database.resolveLocations(object);
 
     return (object == null) ? <NoPage /> : (<div className="w-full flex flex-col justify-center items-center">
         <div className="flex flex-row gap-4 items-center">
@@ -74,8 +74,14 @@ function Info() {
             </div>
             <div className="flex flex-col justify-center items-center">
                 <div className="flex flex-row *:p-2 *:rounded-full *:m-1">
-                    {object.status.replace(" ", "").toLocaleLowerCase() !== "available" ? <button className="bg-green-700 text-white">Check in</button> : ""}
-                    {object.status.replace(" ", "").toLocaleLowerCase() !== "checkedout" ? <button className="bg-blue-700 text-white">Check out</button> : ""}
+                    {objectType === "item" ? (function () {
+                        return (
+                            <>
+                                {object.status.replace(" ", "").toLocaleLowerCase() !== "available" ? <button className="bg-green-700 text-white">Check in</button> : ""}
+                                {object.status.replace(" ", "").toLocaleLowerCase() !== "checkedout" ? <button className="bg-blue-700 text-white">Check out</button> : ""}
+                            </>
+                        );
+                    })() : ""}
                     <button className="bg-red-700 text-white">Delete</button>
                 </div>
                 <form className="flex flex-col justify-center items-center mt-4">
