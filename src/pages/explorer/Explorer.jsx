@@ -114,7 +114,7 @@ function Explorer() {
                         case "item":
                             requestData.data = {
                                 type: "item",
-                                name: parseInt(formData.get("name")),
+                                name: formData.get("name"),
                                 building: parseInt(formData.get("building")),
                                 area: parseInt(formData.get("area")),
                                 shelf: parseInt(formData.get("shelf")),
