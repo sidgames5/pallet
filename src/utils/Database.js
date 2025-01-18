@@ -13,6 +13,10 @@ class Database {
         }
     }
 
+    static create(data) {
+        axios.post("/api/create", data);
+    }
+
     static resolveLocations(obj) {
         let building = null;
         let buildingId = 0;

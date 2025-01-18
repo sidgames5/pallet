@@ -57,7 +57,7 @@ function Explorer() {
                                 default:
                                     return "bg-gray-700";
                             }
-                        })(item.status)} text-white p-1 rounded-full`}>{(function (status) {
+                        })(item.status)} text-white p-1 rounded-full cursor-pointer`}>{(function (status) {
                             const options = [];
                             const defaults = ["available", "checkedout", "unknown"]
                             options.push(status.toLocaleLowerCase().replace(" ", ""));
@@ -94,8 +94,46 @@ function Explorer() {
             <FontAwesomeIcon className="fixed bottom-5 right-5 size-10 p-4 bg-gray-700 text-white rounded-full cursor-pointer hover:bg-sky-600 transition-all duration-300" icon={faPlus} onClick={() => setShowCreateObjectModal(true)} />
             {showCreateObjectModal && <CreateObject
                 onClose={() => setShowCreateObjectModal(false)}
-                onSubmit={() => {
-                    alert("hi");
+                onSubmit={(e) => {
+                    const formData = new FormData(e.currentTarget);
+
+                    const type = formData.get("type");
+
+                    const requestData = {
+                        key: (function () {
+                            if (type === "shelf") {
+                                return "shelves"
+                            } else {
+                                return type + "s";
+                            }
+                        })(),
+                        data: {}
+                    };
+                    console.log(requestData);
+
+                    switch (type) {
+                        case "item":
+                            requestData.data = {
+                                name: formData.get("name"),
+                                slot: formData.get("slot")
+                            };
+                            break;
+                        default:
+                            alert("Invalid data");
+                    }
+
+                    Database.create(requestData);
+                    Database.read().then((d) => {
+                        let path = `/explorer/${type}/`;
+                        switch (type) {
+                            case "item":
+                                path += d.items[d.items.length - 1].id;
+                                break;
+                            default:
+                                alert("Invalid data");
+                        }
+                        window.location.href = path;
+                    })
                 }} />}
         </>
     );

@@ -10,15 +10,16 @@ def read():
     return jsonify(Database.data)
 
 
-@app.route("/api/write", methods=["POST"])
-def write():
+@app.route("/api/create", methods=["POST"])
+def create():
     opts = request.json
     key = None
     data = None
+    print(opts)
     try:
         key = opts["key"]
         data = opts["data"]
-    except AttributeError:
+    except Exception:
         pass
     if key is None or data is None:
         return "Bad request", 400
@@ -30,6 +31,14 @@ def write():
         Database.data[key] = [data]
         Database.save()
         return "Created", 201
+
+
+@app.route("/api/edit", methods=["POST"])
+def edit():
+    opts = request.json
+    category = request.category
+    objectId = request.objectId
+    data = request.data
 
 
 if __name__ == "__main__":

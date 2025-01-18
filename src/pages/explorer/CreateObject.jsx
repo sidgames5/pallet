@@ -13,7 +13,7 @@ function CreateObject(props) {
             </div>
             <form className="flex flex-col items-center justify-center gap-1 mt-1" onSubmit={(e) => {
                 e.preventDefault();
-                props.onSubmit();
+                props.onSubmit(e);
             }}>
                 <div className="flex flex-row align-middle">
                     <label htmlFor="type">Type: </label>
