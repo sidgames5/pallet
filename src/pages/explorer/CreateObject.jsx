@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 function CreateObject(props) {
-    const [showSlotInput, setShowSlotInput] = useState(true);
+    const [objectType, setObjectType] = useState("item");
 
     return (
         <div className="bg-gray-300 p-8 rounded-lg fixed flex flex-col justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -17,7 +17,7 @@ function CreateObject(props) {
             }}>
                 <div className="flex flex-row align-middle">
                     <label htmlFor="type">Type: </label>
-                    <select name="type" id="type" onChange={(e) => setShowSlotInput(e.target.value === "item")}>
+                    <select name="type" id="type" onChange={(e) => setObjectType(e.target.value)}>
                         <option value="item">Item</option>
                         <option value="shelf">Shelf</option>
                         <option value="area">Area</option>
@@ -26,11 +26,23 @@ function CreateObject(props) {
                 </div>
                 <div className="flex flex-row align-middle">
                     <label htmlFor="name">Name: </label>
-                    <input type="text" name="name" id="name" />
+                    <input type="text" name="name" id="name" required />
                 </div>
-                {showSlotInput && <div className="flex flex-row align-middle">
+                {objectType !== "building" && <div className="flex flex-row align-middle">
+                    <label htmlFor="building">Building: </label>
+                    <input type="number" name="building" id="building" required />
+                </div>}
+                {["item", "shelf"].includes(objectType) && <div className="flex flex-row align-middle">
+                    <label htmlFor="area">Area: </label>
+                    <input type="number" name="area" id="area" required />
+                </div>}
+                {["item"].includes(objectType) && <div className="flex flex-row align-middle">
+                    <label htmlFor="shelf">Shelf: </label>
+                    <input type="number" name="shelf" id="shelf" required />
+                </div>}
+                {objectType === "item" && <div className="flex flex-row align-middle">
                     <label htmlFor="slot">Slot: </label>
-                    <input type="number" name="slot" id="slot" />
+                    <input type="number" name="slot" id="slot" required />
                 </div>}
                 <button type="submit" className="p-2 rounded-full bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Create</button>
             </form>

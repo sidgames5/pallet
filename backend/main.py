@@ -15,7 +15,6 @@ def create():
     opts = request.json
     key = None
     data = None
-    print(opts)
     try:
         key = opts["key"]
         data = opts["data"]
@@ -24,6 +23,9 @@ def create():
     if key is None or data is None:
         return "Bad request", 400
     if key in Database.data:
+        print(Database.data[key][-1]["id"])
+        last_id = Database.data[key][-1]["id"]
+        data["id"] = last_id + 1
         Database.data[key].append(data)
         Database.save()
         return "OK", 200

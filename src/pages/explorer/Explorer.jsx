@@ -109,17 +109,22 @@ function Explorer() {
                         })(),
                         data: {}
                     };
-                    console.log(requestData);
 
                     switch (type) {
                         case "item":
                             requestData.data = {
+                                type: "item",
                                 name: formData.get("name"),
-                                slot: formData.get("slot")
+                                building: formData.get("building"),
+                                area: formData.get("area"),
+                                shelf: formData.get("shelf"),
+                                slot: formData.get("slot"),
+                                status: "Unknown"
                             };
                             break;
                         default:
                             alert("Invalid data");
+                            return;
                     }
 
                     Database.create(requestData);
@@ -129,8 +134,18 @@ function Explorer() {
                             case "item":
                                 path += d.items[d.items.length - 1].id;
                                 break;
+                            case "shelf":
+                                path += d.shelves[d.shelves.length - 1].id;
+                                break;
+                            case "area":
+                                path += d.areas[d.areas.length - 1].id;
+                                break;
+                            case "building":
+                                path += d.buildings[d.buildings.length - 1].id;
+                                break;
                             default:
                                 alert("Invalid data");
+                                return;
                         }
                         window.location.href = path;
                     })
