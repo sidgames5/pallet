@@ -7,7 +7,7 @@ function SearchBarcodeForm() {
         }}>
             <div className="flex flex-col items-center">
                 <label htmlFor="id">Barcode or ID</label>
-                <input type="number" name="id" id="id" required onChange={(e) => id = e.currentTarget.value} />
+                <input type="number" name="id" id="id" required onChange={(e) => id = parseInt(e.currentTarget.value)} />
             </div>
             <button type="submit" className="p-4 bg-gray-700 rounded-lg text-white transition-all duration-300 hover:bg-sky-600">Search</button>
         </form>
