@@ -1,9 +1,40 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Database from "../../utils/Database";
 
 function CreateObject(props) {
     const [objectType, setObjectType] = useState("item");
+    const [effectDbDone, setEffectDbDone] = useState(false);
+    const [db, setDb] = useState(null);
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchData = async () => {
+            try {
+                const data = await Database.read();
+                if (isMounted) {
+                    setDb(data);
+                }
+            } catch (e) {
+                console.error("Error: ", e);
+            } finally {
+                if (isMounted) {
+                    setEffectDbDone(true);
+                }
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    if (!effectDbDone) {
+        return <h1>Loading</h1>;
+    }
 
     return (
         <div className="bg-gray-300 p-8 rounded-lg fixed flex flex-col justify-center items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -30,15 +61,24 @@ function CreateObject(props) {
                 </div>
                 {objectType !== "building" && <div className="flex flex-row align-middle">
                     <label htmlFor="building">Building: </label>
-                    <input type="number" name="building" id="building" required />
+                    {/* <input type="number" name="building" id="building" required /> */}
+                    <select name="building" id="building">
+                        {db.buildings.map((object) => <option value={object.id}>{object.name}</option>)}
+                    </select>
                 </div>}
                 {["item", "shelf"].includes(objectType) && <div className="flex flex-row align-middle">
                     <label htmlFor="area">Area: </label>
-                    <input type="number" name="area" id="area" required />
+                    {/* <input type="number" name="area" id="area" required /> */}
+                    <select name="area" id="area">
+                        {db.areas.map((object) => <option value={object.id}>{object.name}</option>)}
+                    </select>
                 </div>}
                 {["item"].includes(objectType) && <div className="flex flex-row align-middle">
                     <label htmlFor="shelf">Shelf: </label>
-                    <input type="number" name="shelf" id="shelf" required />
+                    {/* <input type="number" name="shelf" id="shelf" required /> */}
+                    <select name="shelf" id="shelf">
+                        {db.shelves.map((object) => <option value={object.id}>{object.name}</option>)}
+                    </select>
                 </div>}
                 {objectType === "item" && <div className="flex flex-row align-middle">
                     <label htmlFor="slot">Slot: </label>
