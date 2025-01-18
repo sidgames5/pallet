@@ -154,7 +154,16 @@ function Info() {
                     default:
                         return "bg-gray-700";
                 }
-            })(obj.status)} text-white`}>{obj.status}</span> : ""}
+            })(obj.status)} text-white`}>{(function (status) {
+                switch (status) {
+                    case "checkedout":
+                        return "Checked out";
+                    case "available":
+                        return "Available";
+                    default:
+                        return "Unknown";
+                }
+            })(obj.status)}</span> : ""}
             {["area", "shelf", "item"].includes(objectType) ? <Link to={`/explorer/building/${locations.buildingId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faWarehouse} />{locations.building}</Link> : ""}
             {["shelf", "item"].includes(objectType) ? <Link to={`/explorer/area/${locations.areaId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faDoorOpen} />{locations.area}</Link> : ""}
             {objectType === "item" ? <Link to={`/explorer/shelf/${locations.shelfId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faPallet} />{locations.shelf}</Link> : ""}
