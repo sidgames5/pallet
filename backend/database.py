@@ -11,7 +11,8 @@ class Database:
             with open(".run/main.db", "r", encoding="utf-8") as f:
                 Database.data = json.loads(f.read())
             return
-        os.mkdir(".run")
+        if not os.path.exists(".run"):
+            os.mkdir(".run")
         Database.data = {"buildings": [], "areas": [], "shelves": [], "items": []}
         with open(".run/main.db", "w", encoding="utf-8") as f:
             f.write(json.dumps(Database.data))

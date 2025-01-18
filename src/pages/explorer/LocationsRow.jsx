@@ -13,7 +13,6 @@ function LocationsRow(props) {
         Database.resolveLocations(item)
             .then(resolvedLocations => {
                 setLocations(resolvedLocations);
-                console.log(resolvedLocations);
             })
             .catch(error => console.error("Error: ", error));
     }, [item]);
