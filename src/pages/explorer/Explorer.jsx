@@ -122,6 +122,27 @@ function Explorer() {
                                 status: "Unknown"
                             };
                             break;
+                        case "shelf":
+                            requestData.data = {
+                                type: "shelf",
+                                name: formData.get("name"),
+                                building: formData.get("building"),
+                                area: formData.get("area")
+                            };
+                            break;
+                        case "area":
+                            requestData.data = {
+                                type: "area",
+                                name: formData.get("name"),
+                                building: formData.get("building")
+                            };
+                            break;
+                        case "building":
+                            requestData.data = {
+                                type: "building",
+                                name: formData.get("name")
+                            };
+                            break;
                         default:
                             alert("Invalid data");
                             return;
