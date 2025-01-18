@@ -25,10 +25,14 @@ class Database {
         let shelf = null;
         let shelfId = 0;
 
-        let item = obj;
-        buildingId = item.building;
-        areaId = item.area;
-        shelfId = item.shelf;
+        if (obj == null || obj === undefined) {
+            console.warn("Null object provided");
+            return null;
+        }
+
+        buildingId = parseInt(obj.building);
+        areaId = parseInt(obj.area);
+        shelfId = parseInt(obj.shelf);
 
         return Database.read().then((db) => {
             for (const element of db.buildings) {

@@ -8,13 +8,10 @@ import { useEffect, useState } from "react";
 function Info() {
     const { objectType, objectId } = useParams();
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
-    const [db, setDb] = useState({
-        buildings: [],
-        areas: [],
-        shelves: [],
-        items: []
-    });
+    const [effectDbDone, setEffectDbDone] = useState(false);
+    const [effectObjDone, setEffectObjDone] = useState(false);
+    const [effectLocationsDone, setEffectLocationsDone] = useState(false);
+    const [db, setDb] = useState(null);
     useEffect(() => {
         let isMounted = true;
 
@@ -23,12 +20,12 @@ function Info() {
                 const data = await Database.read();
                 if (isMounted) {
                     setDb(data);
-                    // setIsLoading(false);
                 }
             } catch (e) {
                 console.error("Error: ", e);
+            } finally {
                 if (isMounted) {
-                    // setIsLoading(false);
+                    setEffectDbDone(true);
                 }
             }
         };
@@ -42,58 +39,90 @@ function Info() {
 
     // const locations = Database.resolveLocations(object); 
 
+    const [obj, setObj] = useState(null);
+    // let obj = (function (type, id, database) {
+    //     if (!db || !type || !id) {
+    //         console.error('Missing required data:', { db, type, id });
+    //         return null;
+    //     }
+    //     switch (type) {
+    //         case "item":
+    //             for (const v of database.items) {
+    //                 if (v.id === parseInt(id)) {
+    //                     return v;
+    //                 }
+    //             }
+    //             break;
+    //         case "building":
+    //             for (const v of database.buildings) {
+    //                 if (v.id === parseInt(id)) {
+    //                     return v;
+    //                 }
+    //             }
+    //             break;
+    //         case "area":
+    //             for (const v of database.areas) {
+    //                 if (v.id === parseInt(id)) {
+    //                     return v;
+    //                 }
+    //             }
+    //             break;
+    //         case "shelf":
+    //             for (const v of database.shelves) {
+    //                 if (v.id === parseInt(id)) {
+    //                     return v;
+    //                 }
+    //             }
+    //             break;
+    //         default:
+    //             return null;
+    //     }
+    //     return null;
+    // })(objectType, objectId, db);
+    useEffect(() => {
+        if (db && objectType && objectId) {
+            const result = (function (type, id) {
+                switch (type) {
+                    case "item":
+                        return db.items.find(v => v.id === parseInt(id)) || null;
+                    case "building":
+                        return db.buildings.find(v => v.id === parseInt(id)) || null;
+                    case "area":
+                        return db.areas.find(v => v.id === parseInt(id)) || null;
+                    case "shelf":
+                        return db.shelves.find(v => v.id === parseInt(id)) || null;
+                    default:
+                        return null;
+                }
+            })(objectType, objectId);
 
-    let object = (function (type, id) {
-        switch (type) {
-            case "item":
-                for (const v of db.items) {
-                    if (v.id === parseInt(id)) {
-                        return v;
-                    }
-                }
-                break;
-            case "building":
-                for (const v of db.buildings) {
-                    if (v.id === parseInt(id)) {
-                        return v;
-                    }
-                }
-                break;
-            case "area":
-                for (const v of db.areas) {
-                    if (v.id === parseInt(id)) {
-                        return v;
-                    }
-                }
-                break;
-            case "shelf":
-                for (const v of db.shelves) {
-                    if (v.id === parseInt(id)) {
-                        return v;
-                    }
-                }
-                break;
-            default:
-                return null;
+            setObj(result);
+            setEffectObjDone(true);
         }
-        return null;
-    })(objectType, objectId);
+    }, [db, objectType, objectId]);
 
     const [locations, setLocations] = useState({});
     useEffect(() => {
+
+        if (!obj || !db) {
+            console.log("Object or database is null");
+            return;
+        }
+
         let isMounted = true;
 
         const fetchData = async () => {
             try {
-                const data = await Database.resolveLocations(object);
+                const data = await Database.resolveLocations(obj);
                 if (isMounted) {
                     setLocations(data);
-                    setIsLoading(false);
+                    setEffectLocationsDone(true);
                 }
             } catch (e) {
                 console.error("Error: ", e);
+            } finally {
                 if (isMounted) {
-                    setIsLoading(false);
+                    setEffectLocationsDone(true);
                 }
             }
         };
@@ -103,16 +132,16 @@ function Info() {
         return () => {
             isMounted = false;
         };
-    }, [object]);
+    }, [obj, db]);
 
-    if (isLoading) {
+    if (!effectDbDone && !effectLocationsDone && !effectObjDone) {
         return <div>Loading</div>;
     }
 
-    return (object == null) ? <NoPage /> : (<div className="w-full flex flex-col justify-center items-center">
+    return (obj == null) ? <NoPage /> : (<div className="w-full flex flex-col justify-center items-center">
         <div className="flex flex-row gap-4 items-center">
             <FontAwesomeIcon icon={faArrowLeft} className="size-8 p-2 bg-gray-700 rounded-full text-white cursor-pointer transition-all duration-300 hover:bg-sky-600" onClick={() => navigate(-1)} />
-            <h3>{String(objectType).charAt(0).toUpperCase() + String(objectType).slice(1)} {objectId}: {object.name}</h3>
+            <h3>{String(objectType).charAt(0).toUpperCase() + String(objectType).slice(1)} {objectId}: {obj.name}</h3>
         </div>
         <div className="flex flex-row *:m-2 *:rounded-full *:p-2">
             {objectType === "item" ? <span className={`inline-block ${(function (status) {
@@ -124,11 +153,11 @@ function Info() {
                     default:
                         return "bg-gray-700";
                 }
-            })(object.status)} text-white`}>{object.status}</span> : ""}
+            })(obj.status)} text-white`}>{obj.status}</span> : ""}
             {["area", "shelf", "item"].includes(objectType) ? <Link to={`/explorer/building/${locations.buildingId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faWarehouse} />{locations.building}</Link> : ""}
             {["shelf", "item"].includes(objectType) ? <Link to={`/explorer/area/${locations.areaId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faDoorOpen} />{locations.area}</Link> : ""}
             {objectType === "item" ? <Link to={`/explorer/shelf/${locations.shelfId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faPallet} />{locations.shelf}</Link> : ""}
-            {objectType === "item" ? <span className="inline-block bg-gray-700 text-white">Slot {object.slot}</span> : ""}
+            {objectType === "item" ? <span className="inline-block bg-gray-700 text-white">Slot {obj.slot}</span> : ""}
         </div>
         <div className="grid grid-cols-2 gap-y-10">
             {objectType !== "item" ? <div className="flex flex-col justify-center items-center overflow-y-auto text-wrap">
@@ -157,8 +186,8 @@ function Info() {
                     {objectType === "item" ? (function () {
                         return (
                             <>
-                                {object.status.replace(" ", "").toLocaleLowerCase() !== "available" ? <button className="bg-green-700 text-white">Check in</button> : ""}
-                                {object.status.replace(" ", "").toLocaleLowerCase() !== "checkedout" ? <button className="bg-blue-700 text-white">Check out</button> : ""}
+                                {obj.status.replace(" ", "").toLocaleLowerCase() !== "available" ? <button className="bg-green-700 text-white">Check in</button> : ""}
+                                {obj.status.replace(" ", "").toLocaleLowerCase() !== "checkedout" ? <button className="bg-blue-700 text-white">Check out</button> : ""}
                             </>
                         );
                     })() : ""}
@@ -167,7 +196,7 @@ function Info() {
                 <form className="flex flex-col justify-center items-center mt-4">
                     <div className="flex flex-row items-center">
                         <label htmlFor="name">Name: </label>
-                        <input type="text" name="name" id="name" value={object.name} />
+                        <input type="text" name="name" id="name" value={obj.name} />
                     </div>
                     <button type="submit" className="bg-gray-700 p-2 rounded-full text-white mt-4 hover:bg-sky-600 transition-all duration-300">Update</button>
                 </form>
