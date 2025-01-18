@@ -39,9 +39,18 @@ def create():
 @app.route("/api/edit", methods=["POST"])
 def edit():
     opts = request.json
-    category = request.category
-    objectId = request.objectId
-    data = request.data
+    object_id = opts["objectId"]
+    data = opts["data"]
+    category = opts["category"]
+    index = -1
+    for i, v in enumerate(Database.data[category]):
+        if int(v["id"]) == int(object_id):
+            index = i
+    if index == -1:
+        return "Not found", 404
+    Database.data[category][index].update(data)
+    Database.save()
+    return "OK", 200
 
 
 if __name__ == "__main__":

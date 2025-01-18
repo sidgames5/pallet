@@ -4,6 +4,7 @@ import NoPage from "../NoPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faDoorOpen, faPallet, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 function Info() {
     const { objectType, objectId } = useParams();
@@ -186,8 +187,24 @@ function Info() {
                     {objectType === "item" ? (function () {
                         return (
                             <>
-                                {obj.status.replace(" ", "").toLocaleLowerCase() !== "available" ? <button className="bg-green-700 text-white">Check in</button> : ""}
-                                {obj.status.replace(" ", "").toLocaleLowerCase() !== "checkedout" ? <button className="bg-blue-700 text-white">Check out</button> : ""}
+                                {obj.status.replace(" ", "").toLocaleLowerCase() !== "available" ? <button className="bg-green-700 text-white" onClick={() => {
+                                    axios.post("/api/edit", {
+                                        objectId: objectId,
+                                        category: "items",
+                                        data: {
+                                            status: "available"
+                                        }
+                                    }).then(() => window.location.reload());
+                                }}>Check in</button> : ""}
+                                {obj.status.replace(" ", "").toLocaleLowerCase() !== "checkedout" ? <button className="bg-blue-700 text-white" onClick={() => {
+                                    axios.post("/api/edit", {
+                                        objectId: objectId,
+                                        category: "items",
+                                        data: {
+                                            status: "checkedout"
+                                        }
+                                    }).then(() => window.location.reload());
+                                }}>Check out</button> : ""}
                             </>
                         );
                     })() : ""}
