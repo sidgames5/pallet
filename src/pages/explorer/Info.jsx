@@ -217,7 +217,20 @@ function Info() {
                             </>
                         );
                     })() : ""}
-                    <button className="bg-red-700 text-white">Delete</button>
+                    <button className="bg-red-700 text-white" onClick={() => {
+                        if (window.confirm(`Are you sure you want to delete ${objectType}: ${obj.name}`)) {
+                            axios.post("/api/delete", {
+                                objectId: objectId,
+                                category: (function () {
+                                    if (objectType === "shelf") {
+                                        return "shelves"
+                                    } else {
+                                        return objectType + "s";
+                                    }
+                                })()
+                            }).then(() => window.location.href = "/explorer");
+                        }
+                    }}>Delete</button>
                 </div>
                 <form className="flex flex-col justify-center items-center mt-4">
                     <div className="flex flex-row items-center">

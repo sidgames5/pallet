@@ -53,6 +53,22 @@ def edit():
     return "OK", 200
 
 
+@app.route("/api/delete", methods=["POST"])
+def delete():
+    opts = request.json
+    object_id = opts["objectId"]
+    category = opts["category"]
+    index = -1
+    for i, v in enumerate(Database.data[category]):
+        if int(v["id"]) == int(object_id):
+            index = i
+    if index == -1:
+        return "Not found", 404
+    Database.data[category].pop(index)
+    Database.save()
+    return "OK", 200
+
+
 if __name__ == "__main__":
     Database.init()
     app.run(debug=True, host="0.0.0.0")
