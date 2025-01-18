@@ -114,11 +114,11 @@ function Explorer() {
                         case "item":
                             requestData.data = {
                                 type: "item",
-                                name: formData.get("name"),
-                                building: formData.get("building"),
-                                area: formData.get("area"),
-                                shelf: formData.get("shelf"),
-                                slot: formData.get("slot"),
+                                name: parseInt(formData.get("name")),
+                                building: parseInt(formData.get("building")),
+                                area: parseInt(formData.get("area")),
+                                shelf: parseInt(formData.get("shelf")),
+                                slot: parseInt(formData.get("slot")),
                                 status: "Unknown"
                             };
                             break;
@@ -126,15 +126,15 @@ function Explorer() {
                             requestData.data = {
                                 type: "shelf",
                                 name: formData.get("name"),
-                                building: formData.get("building"),
-                                area: formData.get("area")
+                                building: parseInt(formData.get("building")),
+                                area: parseInt(formData.get("area"))
                             };
                             break;
                         case "area":
                             requestData.data = {
                                 type: "area",
                                 name: formData.get("name"),
-                                building: formData.get("building")
+                                building: parseInt(formData.get("building"))
                             };
                             break;
                         case "building":
