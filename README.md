@@ -1,8 +1,6 @@
 <div align="center">
-  <img src="./src/logo.svg" width="40%"/>
+  <img src="./src/logo.svg" alt="<h1>Pallet</h1>" width="40%"/>
 </div>
-
-<h1 align="center" style="margin-top: -10px"> Pallet </h1>
 
 ## Build and run
 
@@ -28,3 +26,7 @@ npm run start
 ## Contributing
 
 This project is in very early development. Any contributions are greatly appreciated.
+
+## Credits
+
+- Logo by [@lewolfyt](https://github.com/lewolfyt)
