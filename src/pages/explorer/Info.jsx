@@ -186,9 +186,31 @@ function Info() {
                         default:
                             return <p>Error</p>
                     }
-                    return parentObject.map((child) => <Link to={`/explorer/${child.type}/${child.id}`}>
-                        <span>{child.name}</span>
-                    </Link>);
+                    return parentObject.map((child) => {
+                        switch (child.type) {
+                            case "area":
+                                if (child.building !== obj.id) {
+                                    return "";
+                                }
+                                break;
+                            case "shelf":
+                                if (child.area !== obj.id) {
+                                    return "";
+                                }
+                                break;
+                            case "item":
+                                if (child.shelf !== obj.id) {
+                                    return "";
+                                }
+                                break;
+                            default:
+                                return <p>Error</p>
+                        }
+                        return <Link to={`/explorer/${child.type}/${child.id}`}>
+                            <span>{child.name}</span>
+                        </Link>;
+
+                    });
                 })()}
             </div> : ""}
             <div className="flex flex-col justify-center items-center">
