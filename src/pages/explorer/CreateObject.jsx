@@ -6,7 +6,10 @@ import Database from "../../utils/Database";
 function CreateObject(props) {
     const [objectType, setObjectType] = useState("item");
     const [effectDbDone, setEffectDbDone] = useState(false);
+    const [effectSelectionDone, setEffectSelectionDone] = useState(false);
     const [db, setDb] = useState(null);
+    const [selectedBuilding, setSelectedBuilding] = useState(0);
+    const [selectedArea, setSelectedArea] = useState(0);
     useEffect(() => {
         let isMounted = true;
 
@@ -32,7 +35,24 @@ function CreateObject(props) {
         };
     }, []);
 
-    if (!effectDbDone) {
+    useEffect(() => {
+        if (db == null) {
+            return;
+        }
+        if (db.buildings.length > 0) {
+            setSelectedBuilding(db.buildings[0].id);
+        }
+        if (db.areas.length > 0) {
+            for (const a of db.areas) {
+                if (a.building === selectedBuilding) {
+                    setSelectedArea(a.id);
+                }
+            }
+        }
+        setEffectSelectionDone(true);
+    }, [db, selectedBuilding]);
+
+    if (!effectDbDone || !effectSelectionDone) {
         return <h1>Loading</h1>;
     }
 
@@ -48,7 +68,7 @@ function CreateObject(props) {
             }}>
                 <div className="flex flex-row align-middle">
                     <label htmlFor="type">Type: </label>
-                    <select name="type" id="type" onChange={(e) => setObjectType(e.target.value)}>
+                    <select name="type" id="type" onChange={(e) => setObjectType(e.target.value)} required>
                         <option value="item">Item</option>
                         <option value="shelf">Shelf</option>
                         <option value="area">Area</option>
@@ -62,22 +82,32 @@ function CreateObject(props) {
                 {objectType !== "building" && <div className="flex flex-row align-middle">
                     <label htmlFor="building">Building: </label>
                     {/* <input type="number" name="building" id="building" required /> */}
-                    <select name="building" id="building">
+                    <select name="building" id="building" onChange={(e) => { setSelectedBuilding(parseInt(e.currentTarget.value)) }} value={selectedBuilding} required>
                         {db.buildings.map((object) => <option value={object.id}>{object.name}</option>)}
                     </select>
                 </div>}
                 {["item", "shelf"].includes(objectType) && <div className="flex flex-row align-middle">
                     <label htmlFor="area">Area: </label>
                     {/* <input type="number" name="area" id="area" required /> */}
-                    <select name="area" id="area">
-                        {db.areas.map((object) => <option value={object.id}>{object.name}</option>)}
+                    <select name="area" id="area" onChange={(e) => { setSelectedArea(parseInt(e.currentTarget.value)) }} value={selectedArea} required>
+                        {db.areas.map((object) => {
+                            if (object.building === selectedBuilding) {
+                                return <option value={object.id}>{object.name}</option>;
+                            }
+                            return "";
+                        })}
                     </select>
                 </div>}
                 {["item"].includes(objectType) && <div className="flex flex-row align-middle">
                     <label htmlFor="shelf">Shelf: </label>
                     {/* <input type="number" name="shelf" id="shelf" required /> */}
-                    <select name="shelf" id="shelf">
-                        {db.shelves.map((object) => <option value={object.id}>{object.name}</option>)}
+                    <select name="shelf" id="shelf" required>
+                        {db.shelves.map((object) => {
+                            if (object.area === selectedArea) {
+                                return <option value={object.id}>{object.name}</option>;
+                            }
+                            return "";
+                        })}
                     </select>
                 </div>}
                 {objectType === "item" && <div className="flex flex-row align-middle">
