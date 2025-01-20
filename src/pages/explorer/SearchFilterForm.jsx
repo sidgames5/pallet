@@ -36,7 +36,7 @@ function SearchFilterForm(props) {
             </div>
             <div className="flex flex-col items-center">
                 <label htmlFor="area">Room</label>
-                <select name="area" id="area" onChange={(e) => { setSelectedArea(parseInt(e.currentTarget.value)) }} >
+                <select name="area" id="area" onChange={(e) => { setSelectedArea(parseInt(e.currentTarget.value)) }} value={selectedArea} >
                     {areas.map((object) => (function () {
                         if (object.building === selectedBuilding) {
                             return <option value={object.id}>{object.name}</option>;
@@ -49,9 +49,7 @@ function SearchFilterForm(props) {
                 <label htmlFor="shelf">Shelf</label>
                 <select name="shelf" id="shelf">
                     {shelves.map((object) => (function () {
-                        console.log(object.area, selectedArea)
                         if (object.area === selectedArea) {
-                            console.log(object);
                             return <option value={object.id}>{object.name}</option>;
                         }
                         return "";
