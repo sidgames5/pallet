@@ -5,6 +5,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import CreateObject from "./CreateObject";
 import { useState, useEffect } from "react";
 import LocationsRow from "./LocationsRow";
+import axios from "axios";
 
 function Explorer() {
     const [searchParams] = useSearchParams();
@@ -57,7 +58,15 @@ function Explorer() {
                                 default:
                                     return "bg-gray-700";
                             }
-                        })(item.status)} text-white p-1 rounded-full cursor-pointer`}>{(function (status) {
+                        })(item.status)} text-white p-1 rounded-full cursor-pointer`} onChange={(e) => {
+                            axios.post("/api/edit", {
+                                objectId: item.id,
+                                category: "items",
+                                data: {
+                                    status: e.currentTarget.value
+                                }
+                            }).then(() => window.location.reload());
+                        }}>{(function (status) {
                             const options = [];
                             const defaults = ["available", "checkedout", "unknown"]
                             options.push(status.toLocaleLowerCase().replace(" ", ""));
