@@ -213,7 +213,7 @@ function Info() {
                     });
                 })()}
             </div> : ""}
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center mw-[90%]">
                 <div className="flex flex-row *:p-2 *:rounded-full *:m-1">
                     {objectType === "item" ? (function () {
                         return (

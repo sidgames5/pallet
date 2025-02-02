@@ -1,6 +1,6 @@
 import { faBox, faDoorOpen, faPallet, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 
 const Dashboard = () => {
@@ -31,8 +31,9 @@ const Dashboard = () => {
         }
     ];
     return (
-        <div className="grid grid-cols-2 gap-y-10">
-            <div className="recent-activity flex flex-col items-center justify-center">
+        // <div className="grid grid-cols-2 gap-y-10">
+        <div className="flex flex-col justify-center items-center">
+            {/* <div className="recent-activity flex flex-col items-center justify-center">
                 <h4>Recent Activity</h4>
                 <div className="flex flex-row flex-wrap items-center text-center justify-center gap-5 max-w-7xl">
                     {(recentActivity.length > 0) ? (function (list) {
@@ -62,15 +63,7 @@ const Dashboard = () => {
                                 default:
                                     return faBox;
                             }
-                        })(item.type)} />
-                        <span className="activity-item-name">{item.name}</span>
-                        <span className="activity-item-date italic">{(function (date) {
-                            const now = new Date();
-                            const diff = now - date;
-                            const seconds = diff / 1000;
-                            const minutes = seconds / 60;
-                            const hours = minutes / 60;
-                            const days = hours / 24;
+                        })(item.type)} />grid grid-cols-2 gap-y-10
 
                             const formatter = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
 
@@ -93,10 +86,9 @@ const Dashboard = () => {
                         })(item.timestamp * 1000)}</span>
                     </Link>) : <span className="italic">No recent activity</span>}
                 </div>
-            </div>
-            <div>
-                
-            </div>
+            </div> */}
+            <h1>Nothing to see here</h1>
+            <NavLink to="/explorer"><h6>Go to explorer</h6></NavLink>
         </div>
     );
 };
