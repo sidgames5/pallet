@@ -20,7 +20,13 @@ function Explorer() {
                     (!searchParams.has("area") || v.area === parseInt(searchParams.get("area"))) &&
                     (!searchParams.has("shelf") || v.shelf === parseInt(searchParams.get("shelf")))
                 );
-                setItems(filteredItems);
+                const textFilteredItems = filteredItems.filter(v => {
+                    if (!searchParams.has("q")) {
+                        return true;
+                    }
+                    return v.name.toLowerCase().includes(searchParams.get("q").toLowerCase());
+                });
+                setItems(textFilteredItems);
             } catch (error) {
                 console.error("Error fetching or processing items:", error);
                 setItems([]);
