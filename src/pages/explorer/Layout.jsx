@@ -4,6 +4,7 @@ import Database from "../../utils/Database";
 import { useState, useEffect } from "react";
 import SearchFilterForm from "./SearchFilterForm";
 import SearchBarcodeForm from "./SearchBarcodeForm";
+import SearchTextForm from "./SearchTextForm";
 
 const Layout = () => {
     const [buildings, setBuildings] = useState([]);
@@ -49,16 +50,19 @@ const Layout = () => {
     }, []);
 
     const [barcodeSearch, setBarcodeSearch] = useState(false);
+    const [searchType, setSearchType] = useState("filters");
 
     return (
         <>
             <div className="flex flex-col mt-4 items-center justify-center">
                 <div className="flex flex-row rounded-full bg-gray-700 *:p-2 text-white w-fit">
-                    <button className={!barcodeSearch && "bg-sky-600 rounded-l-full"} onClick={() => setBarcodeSearch(false)}>Filters</button>
-                    <button className={barcodeSearch && "bg-sky-600 rounded-r-full"} onClick={() => setBarcodeSearch(true)}>Barcode/ID</button>
+                    <button className={searchType === "filters" && "bg-sky-600 rounded-l-full"} onClick={() => setSearchType("filters")}>Filters</button>
+                    <button className={searchType === "name" && "bg-sky-600"} onClick={() => setSearchType("name")}>Search</button>
+                    <button className={searchType === "barcode" && "bg-sky-600 rounded-r-full"} onClick={() => setSearchType("barcode")}>Barcode/ID</button>
                 </div>
-                {!barcodeSearch && <SearchFilterForm buildings={buildings} areas={areas} shelves={shelves} />}
-                {barcodeSearch && <SearchBarcodeForm />}
+                {searchType === "filters" && <SearchFilterForm buildings={buildings} areas={areas} shelves={shelves} />}
+                {searchType === "name" && <SearchTextForm />}
+                {searchType === "barcode" && <SearchBarcodeForm />}
             </div>
 
             <div className="container flex flex-col items-center mx-auto w-full"><Outlet /></div>
