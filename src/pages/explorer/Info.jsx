@@ -285,7 +285,30 @@ function Info() {
             <div className="flex flex-col justify-center items-center mw-[90%]">
                 <form className="flex flex-col items-center justify-center gap-1 mt-1" onSubmit={(e) => {
                     e.preventDefault();
-                    // TODO: implement moving functionality
+                    const formData = new FormData(e.target);
+                    axios.post("/api/edit", {
+                        objectId: objectId,
+                        category: (function () {
+                            switch (objectType) {
+                                case "building":
+                                    return "buildings";
+                                case "area":
+                                    return "areas";
+                                case "shelf":
+                                    return "shelves";
+                                case "item":
+                                    return "items";
+                                default:
+                                    return null;
+                            }
+                        })(),
+                        data: {
+                            building: formData.get("building"),
+                            area: formData.get("area"),
+                            shelf: formData.get("shelf"),
+                            slot: formData.get("slot")
+                        }
+                    }).then(() => window.location.reload());
                 }}>
                     {objectType !== "building" && <div className="flex flex-row align-middle">
                         <label htmlFor="building">Building: </label>
