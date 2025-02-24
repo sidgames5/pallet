@@ -320,7 +320,7 @@ function Info() {
                     </div>}
                     {objectType === "item" && <div className="flex flex-row align-middle">
                         <label htmlFor="slot">Slot: </label>
-                        <input type="number" name="slot" id="slot" required />
+                        <input type="number" name="slot" id="slot" defaultValue={obj.slot} required />
                     </div>}
                     <button type="submit" className="p-2 rounded-full bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Move</button>
                 </form>
