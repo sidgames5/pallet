@@ -12,6 +12,7 @@ function Info() {
     const [effectDbDone, setEffectDbDone] = useState(false);
     const [effectObjDone, setEffectObjDone] = useState(false);
     const [effectLocationsDone, setEffectLocationsDone] = useState(false);
+    const [effectSelectionDone, setEffectSelectionDone] = useState(false);
     const [db, setDb] = useState(null);
     const [selectedBuilding, setSelectedBuilding] = useState(0);
     const [selectedArea, setSelectedArea] = useState(0);
@@ -39,6 +40,23 @@ function Info() {
             isMounted = false;
         };
     }, []);
+
+    useEffect(() => {
+        if (db == null) {
+            return;
+        }
+        if (db.buildings.length > 0) {
+            setSelectedBuilding(db.buildings[0].id);
+        }
+        if (db.areas.length > 0) {
+            for (const a of db.areas) {
+                if (a.building === selectedBuilding) {
+                    setSelectedArea(a.id);
+                }
+            }
+        }
+        setEffectSelectionDone(true);
+    }, [db, selectedBuilding]);
 
     // const locations = Database.resolveLocations(object); 
 
@@ -137,7 +155,7 @@ function Info() {
         };
     }, [obj, db]);
 
-    if (!effectDbDone && !effectLocationsDone && !effectObjDone) {
+    if (!effectDbDone && !effectLocationsDone && !effectObjDone && !effectSelectionDone) {
         return <div>Loading</div>;
     }
 
