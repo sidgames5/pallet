@@ -4,6 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 
 
 const Dashboard = () => {
+    window.location.href = "/explorer";
     const recentActivity = [
         {
             type: "item",
