@@ -13,6 +13,8 @@ function Info() {
     const [effectObjDone, setEffectObjDone] = useState(false);
     const [effectLocationsDone, setEffectLocationsDone] = useState(false);
     const [db, setDb] = useState(null);
+    const [selectedBuilding, setSelectedBuilding] = useState(0);
+    const [selectedArea, setSelectedArea] = useState(0);
     useEffect(() => {
         let isMounted = true;
 
@@ -260,6 +262,49 @@ function Info() {
                         <input type="text" name="name" id="name" value={obj.name} />
                     </div>
                     <button type="submit" className="bg-gray-700 p-2 rounded-full text-white mt-4 hover:bg-sky-600 transition-all duration-300">Update</button>
+                </form>
+            </div>
+            <div className="flex flex-col justify-center items-center mw-[90%]">
+                <form className="flex flex-col items-center justify-center gap-1 mt-1" onSubmit={(e) => {
+                    e.preventDefault();
+                    // TODO: implement moving functionality
+                }}>
+                    {objectType !== "building" && <div className="flex flex-row align-middle">
+                        <label htmlFor="building">Building: </label>
+                        {/* <input type="number" name="building" id="building" required /> */}
+                        <select name="building" id="building" onChange={(e) => { setSelectedBuilding(parseInt(e.currentTarget.value)) }} value={selectedBuilding} required>
+                            {db.buildings.map((object) => <option value={object.id}>{object.name}</option>)}
+                        </select>
+                    </div>}
+                    {["item", "shelf"].includes(objectType) && <div className="flex flex-row align-middle">
+                        <label htmlFor="area">Area: </label>
+                        {/* <input type="number" name="area" id="area" required /> */}
+                        <select name="area" id="area" onChange={(e) => { setSelectedArea(parseInt(e.currentTarget.value)) }} value={selectedArea} required>
+                            {db.areas.map((object) => {
+                                if (object.building === selectedBuilding) {
+                                    return <option value={object.id}>{object.name}</option>;
+                                }
+                                return "";
+                            })}
+                        </select>
+                    </div>}
+                    {["item"].includes(objectType) && <div className="flex flex-row align-middle">
+                        <label htmlFor="shelf">Shelf: </label>
+                        {/* <input type="number" name="shelf" id="shelf" required /> */}
+                        <select name="shelf" id="shelf" required>
+                            {db.shelves.map((object) => {
+                                if (object.area === selectedArea) {
+                                    return <option value={object.id}>{object.name}</option>;
+                                }
+                                return "";
+                            })}
+                        </select>
+                    </div>}
+                    {objectType === "item" && <div className="flex flex-row align-middle">
+                        <label htmlFor="slot">Slot: </label>
+                        <input type="number" name="slot" id="slot" required />
+                    </div>}
+                    <button type="submit" className="p-2 rounded-full bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Move</button>
                 </form>
             </div>
         </div>
