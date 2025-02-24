@@ -274,10 +274,33 @@ function Info() {
                         }
                     }}>Delete</button>
                 </div>
-                <form className="flex flex-col justify-center items-center mt-4">
+                <form className="flex flex-col justify-center items-center mt-4" onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    axios.post("/api/edit", {
+                        objectId: objectId,
+                        category: (function () {
+                            switch (objectType) {
+                                case "building":
+                                    return "buildings";
+                                case "area":
+                                    return "areas";
+                                case "shelf":
+                                    return "shelves";
+                                case "item":
+                                    return "items";
+                                default:
+                                    return null;
+                            }
+                        })(),
+                        data: {
+                            name: formData.get("name")
+                        }
+                    }).then(() => window.location.reload());
+                }}>
                     <div className="flex flex-row items-center">
                         <label htmlFor="name">Name: </label>
-                        <input type="text" name="name" id="name" value={obj.name} />
+                        <input type="text" name="name" id="name" defaultValue={obj.name} />
                     </div>
                     <button type="submit" className="bg-gray-700 p-2 rounded-full text-white mt-4 hover:bg-sky-600 transition-all duration-300">Update</button>
                 </form>
