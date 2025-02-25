@@ -8,7 +8,7 @@ function SearchBarcodeForm() {
             axios.get("/api/read").then((res) => {
                 let found = false;
                 for (let o of res.data.items) {
-                    if (o.id == id) {
+                    if (o.id === id) {
                         found = true;
                         window.location.href = `/explorer/item/${id}`;
                     }
