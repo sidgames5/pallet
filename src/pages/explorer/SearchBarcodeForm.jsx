@@ -1,9 +1,20 @@
+import axios from "axios";
+
 function SearchBarcodeForm() {
     let id = 0;
     return (
         <form className="search-filters flex flex-row justify-center items-center gap-8 m-4" onSubmit={(e) => {
             e.preventDefault();
-            window.location.href = `/explorer/item/${id}`;
+            axios.get("/api/read").then((res) => {
+                let found = false;
+                for (let o of res.data.items) {
+                    if (o.id == id) {
+                        found = true;
+                        window.location.href = `/explorer/item/${id}`;
+                    }
+                }
+                if (!found) alert(`No item with id ${id} found`);
+            })
         }}>
             <div className="flex flex-col items-center">
                 <label htmlFor="id">Barcode or ID</label>
