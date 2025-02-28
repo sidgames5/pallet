@@ -307,7 +307,7 @@ function Info() {
                     <button type="submit" className="bg-gray-700 p-2 rounded-full text-white mt-4 hover:bg-sky-600 transition-all duration-300">Update</button>
                 </form>
             </div>
-            <div className="flex flex-col justify-center items-center mw-[90%]">
+            {objectType !== "building" && <div className="flex flex-col justify-center items-center mw-[90%]">
                 <form className="flex flex-col items-center justify-center gap-1 mt-1" onSubmit={(e) => {
                     e.preventDefault();
                     const formData = new FormData(e.target);
@@ -372,7 +372,7 @@ function Info() {
                     </div>}
                     <button type="submit" className="p-2 rounded-full bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Move</button>
                 </form>
-            </div>
+            </div>}
             {objectType === "item" && <div className="flex flex-col justify-center items-center mw-[90%]">
                 <p>Barcode</p>
                 <ReactBarcode value={obj.id.toString().padStart(7, "0")} options={{width: 2, height: 80}} />
