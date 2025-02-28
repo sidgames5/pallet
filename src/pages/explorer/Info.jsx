@@ -373,10 +373,10 @@ function Info() {
                     <button type="submit" className="p-2 rounded-full bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Move</button>
                 </form>
             </div>
-            <div className="flex flex-col justify-center items-center mw-[90%]">
+            {objectType === "item" && <div className="flex flex-col justify-center items-center mw-[90%]">
                 <p>Barcode</p>
                 <ReactBarcode value={obj.id.toString().padStart(7, "0")} options={{width: 2, height: 80}} />
-            </div>
+            </div>}
         </div>
     </div>);
 }
