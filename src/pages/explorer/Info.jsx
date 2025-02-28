@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faDoorOpen, faPallet, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import JsBarcode from "jsbarcode";
+import { ReactBarcode } from "react-jsbarcode";
 
 function Info() {
     const { objectType, objectId } = useParams();
@@ -370,6 +372,10 @@ function Info() {
                     </div>}
                     <button type="submit" className="p-2 rounded-full bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Move</button>
                 </form>
+            </div>
+            <div className="flex flex-col justify-center items-center mw-[90%]">
+                <p>Barcode</p>
+                <ReactBarcode value={obj.id.toString().padStart(7, "0")} options={{width: 2, height: 80}} />
             </div>
         </div>
     </div>);

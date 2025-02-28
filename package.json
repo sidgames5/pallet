@@ -11,10 +11,12 @@
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
         "axios": "^1.7.9",
+        "jsbarcode": "^3.11.6",
         "motion": "^11.18.0",
         "react": "^19.0.0",
         "react-confirm": "^0.3.0-7",
         "react-dom": "^19.0.0",
+        "react-jsbarcode": "^1.0.1",
         "react-scripts": "5.0.1",
         "sass": "^1.83.4",
         "web-vitals": "^2.1.4"
