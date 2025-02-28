@@ -39,7 +39,8 @@ function Explorer() {
 
     return (
         <>
-            <table className="search-results w-full text-left rtl:text-right">
+            <div className="overflow-x-auto w-full">
+            <table className="search-results w-full text-left rtl:text-right table-auto">
                 <thead class="text-white uppercase bg-sky-600">
                     <tr>
                         <th>ID</th>
@@ -105,6 +106,7 @@ function Explorer() {
                     </tr>)}
                 </tbody>
             </table>
+            </div>
 
             <FontAwesomeIcon className="fixed bottom-5 right-5 size-10 p-4 bg-gray-700 text-white rounded-full cursor-pointer hover:bg-sky-600 transition-all duration-300" icon={faPlus} onClick={() => setShowCreateObjectModal(true)} />
             {showCreateObjectModal && <CreateObject
