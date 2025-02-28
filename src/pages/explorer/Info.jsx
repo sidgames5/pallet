@@ -166,7 +166,7 @@ function Info() {
             <FontAwesomeIcon icon={faArrowLeft} className="size-8 p-2 bg-gray-700 rounded-full text-white cursor-pointer transition-all duration-300 hover:bg-sky-600" onClick={() => navigate(-1)} />
             <h3>{String(objectType).charAt(0).toUpperCase() + String(objectType).slice(1)} {objectId}: {obj.name}</h3>
         </div>
-        <div className="flex flex-row *:m-2 *:rounded-full *:p-2">
+        <div className="flex md:flex-row flex-wrap items-center justify-center *:m-2 *:rounded-full *:p-2">
             {objectType === "item" ? <span className={`inline-block ${(function (status) {
                 switch (status.replace(" ", "").toLocaleLowerCase()) {
                     case "checkedout":
@@ -191,7 +191,7 @@ function Info() {
             {objectType === "item" ? <Link to={`/explorer/shelf/${locations.shelfId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faPallet} />{locations.shelf}</Link> : ""}
             {objectType === "item" ? <span className="inline-block bg-gray-700 text-white">Slot {obj.slot}</span> : ""}
         </div>
-        <div className="grid grid-cols-2 gap-y-10">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-10">
             {objectType !== "item" ? <div className="flex flex-col justify-center items-center overflow-y-auto text-wrap">
                 {(function () {
                     let parentObject = null;
