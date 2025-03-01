@@ -9,6 +9,8 @@ import Explorer from './pages/explorer/Explorer';
 import Info from './pages/explorer/Info';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import ToolsLayout from './pages/tools/ToolsLayout';
+import ToolsPage from './pages/tools/ToolsPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -23,6 +25,9 @@ root.render(
                     <Route path="area" element={<NoPage />} />
                     <Route path="shelf" element={<NoPage />} />
                     <Route path=":objectType/:objectId" element={<Info />} />
+                </Route>
+                <Route path="tools" element={<ToolsLayout />}>
+                    <Route index element={<ToolsPage />} />
                 </Route>
             </Route>
             <Route path="*" element={<NoPage />} />
