@@ -395,7 +395,7 @@ function Info() {
             </div>}
             {objectType === "item" && <div className="flex flex-col justify-center items-center mw-[90%]">
                 <p>Barcode</p>
-                <ReactBarcode value={obj.id.toString().padStart(7, "0")} options={{ width: 2, height: 80 }} />
+                <span className="-z-[1]"><ReactBarcode value={obj.id.toString().padStart(7, "0")} options={{ width: 2, height: 80, flat: true }} /></span>
             </div>}
         </div>
     </div>);
