@@ -55,10 +55,10 @@ const Layout = () => {
     return (
         <>
             <div className="flex flex-col mt-4 items-center justify-center">
-                <div className="flex flex-row rounded-full bg-gray-700 *:p-2 text-white w-fit">
-                    <button className={searchType === "filters" && "bg-sky-600 rounded-l-full"} onClick={() => setSearchType("filters")}>Filters</button>
+                <div className="flex flex-row rounded-lg bg-gray-700 *:p-2 text-white w-fit">
+                    <button className={searchType === "filters" && "bg-sky-600 rounded-l-lg"} onClick={() => setSearchType("filters")}>Filters</button>
                     <button className={searchType === "name" && "bg-sky-600"} onClick={() => setSearchType("name")}>Search</button>
-                    <button className={searchType === "barcode" && "bg-sky-600 rounded-r-full"} onClick={() => setSearchType("barcode")}>Barcode/ID</button>
+                    <button className={searchType === "barcode" && "bg-sky-600 rounded-r-lg"} onClick={() => setSearchType("barcode")}>Barcode/ID</button>
                 </div>
                 {searchType === "filters" && <SearchFilterForm buildings={buildings} areas={areas} shelves={shelves} />}
                 {searchType === "name" && <SearchTextForm />}

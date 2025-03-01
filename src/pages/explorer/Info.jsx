@@ -163,10 +163,10 @@ function Info() {
 
     return (obj == null) ? <NoPage /> : (<div className="w-full flex flex-col justify-center items-center">
         <div className="flex flex-row gap-4 items-center">
-            <FontAwesomeIcon icon={faArrowLeft} className="size-8 p-2 bg-gray-700 rounded-full text-white cursor-pointer transition-all duration-300 hover:bg-sky-600" onClick={() => navigate(-1)} />
+            <FontAwesomeIcon icon={faArrowLeft} className="size-8 p-2 bg-gray-700 rounded-lg text-white cursor-pointer transition-all duration-300 hover:bg-sky-600" onClick={() => navigate(-1)} />
             <h3>{String(objectType).charAt(0).toUpperCase() + String(objectType).slice(1)} {objectId}: {obj.name}</h3>
         </div>
-        <div className="flex md:flex-row flex-wrap items-center justify-center *:m-2 *:rounded-full *:p-2">
+        <div className="flex md:flex-row flex-wrap items-center justify-center *:m-2 *:rounded-lg *:p-2">
             {objectType === "item" ? <span className={`inline-block ${(function (status) {
                 if (obj.status == null) {
                     return "bg-gray-700";
@@ -242,7 +242,7 @@ function Info() {
                 })()}
             </div> : ""}
             <div className="flex flex-col justify-center items-center mw-[90%]">
-                <div className="flex flex-row *:p-2 *:rounded-full *:m-1">
+                <div className="flex flex-row *:p-2 *:rounded-lg *:m-1">
                     {objectType === "item" ? (function () {
                         return (
                             <>
@@ -324,7 +324,7 @@ function Info() {
                         <label htmlFor="name">Name: </label>
                         <input type="text" name="name" id="name" defaultValue={obj.name} />
                     </div>
-                    <button type="submit" className="bg-gray-700 p-2 rounded-full text-white mt-4 hover:bg-sky-600 transition-all duration-300">Update</button>
+                    <button type="submit" className="bg-gray-700 p-2 rounded-lg text-white mt-4 hover:bg-sky-600 transition-all duration-300">Update</button>
                 </form>
             </div>
             {objectType !== "building" && <div className="flex flex-col justify-center items-center mw-[90%]">
@@ -390,7 +390,7 @@ function Info() {
                         <label htmlFor="slot">Slot: </label>
                         <input type="number" name="slot" id="slot" defaultValue={obj.slot} required />
                     </div>}
-                    <button type="submit" className="p-2 rounded-full bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Move</button>
+                    <button type="submit" className="p-2 rounded-lg bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Move</button>
                 </form>
             </div>}
             {objectType === "item" && <div className="flex flex-col justify-center items-center mw-[90%]">
