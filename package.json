@@ -13,6 +13,7 @@
         "axios": "^1.7.9",
         "jsbarcode": "^3.11.6",
         "motion": "^11.18.0",
+        "quagga": "^0.12.1",
         "react": "^19.0.0",
         "react-barcode-detection": "^0.0.15",
         "react-barcode-scanner": "^3.2.1",
