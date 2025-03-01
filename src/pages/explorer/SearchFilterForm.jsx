@@ -27,7 +27,7 @@ function SearchFilterForm(props) {
     }
 
     return (
-        <form className="search-filters flex flex-row justify-center items-center gap-8 m-4">
+        <form className="search-filters flex lg:flex-row flex-wrap justify-center items-center gap-8 m-4">
             <div className="flex flex-col items-center">
                 <label htmlFor="building">Building</label>
                 <select name="building" id="building" onChange={(e) => { setSelectedBuilding(parseInt(e.currentTarget.value)) }}>
