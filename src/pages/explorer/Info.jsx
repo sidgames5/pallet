@@ -168,7 +168,10 @@ function Info() {
         </div>
         <div className="flex md:flex-row flex-wrap items-center justify-center *:m-2 *:rounded-full *:p-2">
             {objectType === "item" ? <span className={`inline-block ${(function (status) {
-                switch (status.replace(" ", "").toLocaleLowerCase()) {
+                if (obj.status == null) {
+                    return "bg-gray-700";
+                }
+                switch (obj.status.replace(" ", "").toLocaleLowerCase()) {
                     case "checkedout":
                         return "bg-red-700";
                     case "available":
@@ -177,7 +180,10 @@ function Info() {
                         return "bg-gray-700";
                 }
             })(obj.status)} text-white`}>{(function (status) {
-                switch (status) {
+                if (obj.status == null) {
+                    return "bg-gray-700";
+                }
+                switch (obj.status) {
                     case "checkedout":
                         return "Checked out";
                     case "available":
@@ -240,24 +246,38 @@ function Info() {
                     {objectType === "item" ? (function () {
                         return (
                             <>
-                                {obj.status.replace(" ", "").toLocaleLowerCase() !== "available" ? <button className="bg-green-700 text-white" onClick={() => {
-                                    axios.post("/api/edit", {
-                                        objectId: objectId,
-                                        category: "items",
-                                        data: {
-                                            status: "available"
-                                        }
-                                    }).then(() => window.location.reload());
-                                }}>Check in</button> : ""}
-                                {obj.status.replace(" ", "").toLocaleLowerCase() !== "checkedout" ? <button className="bg-blue-700 text-white" onClick={() => {
-                                    axios.post("/api/edit", {
-                                        objectId: objectId,
-                                        category: "items",
-                                        data: {
-                                            status: "checkedout"
-                                        }
-                                    }).then(() => window.location.reload());
-                                }}>Check out</button> : ""}
+                                {(obj?.status?.replace(" ", "").toLowerCase() ?? "") !== "available" ? (
+                                    <button
+                                        className="bg-green-700 text-white"
+                                        onClick={() => {
+                                            axios.post("/api/edit", {
+                                                objectId: objectId,
+                                                category: "items",
+                                                data: {
+                                                    status: "available"
+                                                }
+                                            }).then(() => window.location.reload());
+                                        }}
+                                    >
+                                        Check in
+                                    </button>
+                                ) : ""}
+                                {(obj?.status?.replace(" ", "").toLowerCase() ?? "") !== "checkedout" ? (
+                                    <button
+                                        className="bg-blue-700 text-white"
+                                        onClick={() => {
+                                            axios.post("/api/edit", {
+                                                objectId: objectId,
+                                                category: "items",
+                                                data: {
+                                                    status: "checkedout"
+                                                }
+                                            }).then(() => window.location.reload());
+                                        }}
+                                    >
+                                        Check out
+                                    </button>
+                                ) : ""}
                             </>
                         );
                     })() : ""}
@@ -375,7 +395,7 @@ function Info() {
             </div>}
             {objectType === "item" && <div className="flex flex-col justify-center items-center mw-[90%]">
                 <p>Barcode</p>
-                <ReactBarcode value={obj.id.toString().padStart(7, "0")} options={{width: 2, height: 80}} />
+                <ReactBarcode value={obj.id.toString().padStart(7, "0")} options={{ width: 2, height: 80 }} />
             </div>}
         </div>
     </div>);
