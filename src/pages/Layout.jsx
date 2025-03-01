@@ -21,9 +21,9 @@ const Layout = () => {
             </div>
 
             <FontAwesomeIcon className="topnav-button fixed lg:hidden size-10 cursor-pointer transition-all duration-300 text-gray-700 hover:text-white hover:bg-gray-700 p-4 rounded-full hover:m-1" icon={faBars} onClick={() => setInNavMenu(true)} />
-            <div className={`screen-cover ${inNavMenu ? "flex" : "hidden"} fixed w-screen h-screen bg-black bg-opacity-50`} />
+            <div className={`screen-cover ${inNavMenu ? "flex" : "hidden"} fixed w-screen h-screen bg-black bg-opacity-50`} onClick={() => setInNavMenu(false)} />
             <div className={`sidenav fixed ${inNavMenu ? "flex" : "hidden"} flex-row`}>
-                <div className="flex flex-col w-fit bg-gray-700">
+                <div className="flex flex-col w-fit h-fit bg-gray-700">
                     {links.map((item) => <NavLink
                         key={item[0]}
                         to={item[0]}
