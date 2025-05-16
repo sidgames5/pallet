@@ -62,7 +62,10 @@ export default function Tags() {
                         style={{ backgroundColor: tag.color }}
                     ></div>
                     <span>{tag.name}</span>
-                    <span>0 items</span> {/*TODO: make this actually count the items*/}
+                    <span>{(function () {
+                        const items = db.items.filter(item => item.tags.includes(tag.id));
+                        return items.length;
+                    })()} items</span>
                 </Link>
             ))}
         </div>
