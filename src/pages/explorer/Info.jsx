@@ -397,10 +397,81 @@ function Info() {
                 <p>Barcode</p>
                 <span className="-z-[1]"><ReactBarcode value={obj.id.toString().padStart(7, "0")} options={{ width: 2, height: 80, flat: true }} /></span>
             </div>}
-            {objectType === "item" && <div className="flex flex-col justify-center items-center mw-[90%]">
-                <p>Tags</p>
-                {/* TODO */}
-            </div>}
+            {objectType === "item" && (
+                <div className="flex flex-col justify-center items-center mw-[90%]">
+                    <p>Tags</p>
+                    <div className="flex flex-wrap gap-2">
+                        {obj.tags.map((tagId, index) => {
+                            const tag = db.tags.find((t) => t.id === tagId);
+                            return (
+                                <span
+                                    key={index}
+                                    className="bg-gray-700 text-white px-2 py-1 rounded-full flex items-center gap-2"
+                                >
+                                    <Link
+                                        to={`/tags/${tagId}`}
+                                        className="text-white hover:underline"
+                                    >
+                                        {tag?.name || "Unknown"}
+                                    </Link>
+                                    <button
+                                        className="text-red-500 hover:text-red-700"
+                                        onClick={() => {
+                                            axios.post("/api/edit", {
+                                                objectId: objectId,
+                                                category: "items",
+                                                data: {
+                                                    tags: obj.tags.filter((t) => t !== tagId),
+                                                },
+                                            }).then(() => window.location.reload());
+                                        }}
+                                    >
+                                        &times;
+                                    </button>
+                                </span>
+                            );
+                        })}
+                    </div>
+                    <form
+                        className="flex flex-col items-center mt-4"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            const formData = new FormData(e.target);
+                            const newTagId = parseInt(formData.get("newTag"), 10);
+                            if (!newTagId || obj.tags.includes(newTagId)) return;
+
+                            axios.post("/api/edit", {
+                                objectId: objectId,
+                                category: "items",
+                                data: {
+                                    tags: [...obj.tags, newTagId],
+                                },
+                            }).then(() => window.location.reload());
+                        }}
+                    >
+                        <input
+                            type="text"
+                            name="newTag"
+                            placeholder="Search for a tag"
+                            className="p-2 border rounded-lg w-full"
+                            list="tags-list"
+                        />
+                        <datalist id="tags-list">
+                            {db.tags.map((tag) => (
+                                <option key={tag.id} value={tag.id}>
+                                    {tag.name}
+                                </option>
+                            ))}
+                        </datalist>
+                        <button
+                            type="submit"
+                            className="bg-gray-700 text-white px-4 py-2 rounded-lg mt-2 hover:bg-sky-600 transition-all duration-300"
+                        >
+                            Add Tag
+                        </button>
+                    </form>
+                </div>
+            )}
         </div>
     </div>);
 }
