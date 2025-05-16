@@ -8,6 +8,7 @@ const Layout = () => {
     const links = [
         // ["/", "Dashboard"],
         ["/explorer", "Explorer"],
+        ["/tags", "Tags"],
         ["/tools", "Tools"]
     ];
     const [inNavMenu, setInNavMenu] = useState(false);

@@ -136,7 +136,8 @@ function Explorer() {
                                 area: parseInt(formData.get("area")),
                                 shelf: parseInt(formData.get("shelf")),
                                 slot: parseInt(formData.get("slot")),
-                                status: "Unknown"
+                                status: "Unknown",
+                                tags: []
                             };
                             break;
                         case "shelf":

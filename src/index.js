@@ -11,6 +11,9 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import ToolsLayout from './pages/tools/ToolsLayout';
 import ToolsPage from './pages/tools/ToolsPage';
+import TagsLayout from './pages/tags/Layout';
+import Tags from './pages/tags/Tags';
+import TagInfo from './pages/tags/TagInfo';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,10 +24,14 @@ root.render(
                 <Route path="explorer" element={<LayoutExplorer />}>
                     <Route index element={<Explorer />} />
                     <Route path="item" element={<NoPage />} />
-                    <Route path="buulding" element={<NoPage />} />
+                    <Route path="building" element={<NoPage />} />
                     <Route path="area" element={<NoPage />} />
                     <Route path="shelf" element={<NoPage />} />
                     <Route path=":objectType/:objectId" element={<Info />} />
+                </Route>
+                <Route path="tags" element={<TagsLayout/>}>
+                    <Route index element={<Tags/>}/>
+                    <Route path=":tagId" element={<TagInfo />} />
                 </Route>
                 <Route path="tools" element={<ToolsLayout />}>
                     <Route index element={<ToolsPage />} />

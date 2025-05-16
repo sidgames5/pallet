@@ -13,7 +13,7 @@ class Database:
             return
         if not os.path.exists(".run"):
             os.mkdir(".run")
-        Database.data = {"buildings": [], "areas": [], "shelves": [], "items": []}
+        Database.data = {"buildings": [], "areas": [], "shelves": [], "items": [], "tags": []}
         with open(".run/main.db", "w", encoding="utf-8") as f:
             f.write(json.dumps(Database.data))
             f.close()
