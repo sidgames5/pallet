@@ -6,20 +6,6 @@ export default function Tags() {
     const [db, setDb] = useState(null);
     const [effectDbDone, setEffectDbDone] = useState(false);
     const [tags, setTags] = useState([
-        {
-            type: "tag",
-            name: "Electronics",
-            description: "Description 1",
-            color: "red",
-            id: 1
-        },
-        {
-            type: "tag",
-            name: "Hardware",
-            description: "Description 1",
-            color: "orange",
-            id: 2
-        }
     ]);
 
     useEffect(() => {
@@ -46,6 +32,18 @@ export default function Tags() {
             isMounted = false;
         };
     }, []);
+
+    useEffect(() => {
+        if (db && effectDbDone) {
+            const tags = db.tags.map(tag => ({
+                id: tag.id,
+                name: tag.name,
+                color: tag.color,
+                description: tag.description
+            }));
+            setTags(tags);
+        }
+    }, [db, effectDbDone]);
 
     return <div>
         <div className="flex flex-wrap w-full gap-4">
