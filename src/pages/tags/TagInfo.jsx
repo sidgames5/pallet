@@ -54,7 +54,10 @@ export default function TagInfo() {
             <div className="flex flex-col items-center w-full gap-4">
                 <div className="flex flex-row items-center gap-4">
                     <FontAwesomeIcon icon={faArrowLeft} className="size-8 p-2 bg-gray-700 rounded-lg text-white cursor-pointer transition-all duration-300 hover:bg-sky-600" onClick={() => navigate(-1)} />
-                    <div className={`w-8 h-8 rounded-full bg-${tag.color}-500`}></div>
+                    <div
+                        className="p-4 rounded-full w-8 h-8"
+                        style={{ backgroundColor: tag.color }}
+                    ></div>
                     <div className="flex flex-col">
 
                         <h1 className="text-2xl font-bold">{tag.name}</h1>

@@ -397,6 +397,10 @@ function Info() {
                 <p>Barcode</p>
                 <span className="-z-[1]"><ReactBarcode value={obj.id.toString().padStart(7, "0")} options={{ width: 2, height: 80, flat: true }} /></span>
             </div>}
+            {objectType === "item" && <div className="flex flex-col justify-center items-center mw-[90%]">
+                <p>Tags</p>
+                {/* TODO */}
+            </div>}
         </div>
     </div>);
 }
