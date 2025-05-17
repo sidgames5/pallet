@@ -127,6 +127,12 @@ function Explorer() {
                         data: {}
                     };
 
+                    let stock = -1
+
+                    if (formData.get("isConsumable")) {
+                        stock = parseInt(formData.get("stock")) || 0;
+                    }
+
                     switch (type) {
                         case "item":
                             requestData.data = {
@@ -137,6 +143,7 @@ function Explorer() {
                                 shelf: parseInt(formData.get("shelf")),
                                 slot: parseInt(formData.get("slot")),
                                 status: "Unknown",
+                                stock: stock,
                                 tags: []
                             };
                             break;

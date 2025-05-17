@@ -10,6 +10,7 @@ function CreateObject(props) {
     const [db, setDb] = useState(null);
     const [selectedBuilding, setSelectedBuilding] = useState(0);
     const [selectedArea, setSelectedArea] = useState(0);
+    const [isConsumable, setIsConsumable] = useState(false);
     useEffect(() => {
         let isMounted = true;
 
@@ -113,6 +114,15 @@ function CreateObject(props) {
                 {objectType === "item" && <div className="flex flex-row align-middle">
                     <label htmlFor="slot">Slot: </label>
                     <input type="number" name="slot" id="slot" required />
+                </div>}
+
+                <div className="flex flex-row align-middle gap-2">
+                    <label htmlFor="isConsumable">Consumable</label>
+                    <input type="checkbox" name="isConsumable" id="isConsumable" onChange={(e) => setIsConsumable(e.target.checked)} />
+                </div>
+                {(objectType === "item" && isConsumable) && <div className="flex flex-row align-middle">
+                    <label htmlFor="stock">Stock: </label>
+                    <input type="number" name="stock" id="stock" required />
                 </div>}
                 <button type="submit" className="p-2 rounded-lg bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Create</button>
             </form>
