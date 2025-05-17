@@ -177,6 +177,15 @@ function Info() {
                     case "available":
                         return "bg-green-700";
                     default:
+                        if (obj.stock != null) {
+                            if (obj.stock > 10) {
+                                return "bg-green-700";
+                            } else if (obj.stock > 0) {
+                                return "bg-yellow-700";
+                            } else if (obj.stock === 0) {
+                                return "bg-red-700";
+                            }
+                        }
                         return "bg-gray-700";
                 }
             })(obj.status)} text-white`}>{(function (status) {
@@ -189,6 +198,9 @@ function Info() {
                     case "available":
                         return "Available";
                     default:
+                        if (obj.stock != null) {
+                            return `${obj.stock} in stock`;
+                        }
                         return "Unknown";
                 }
             })(obj.status)}</span> : ""}

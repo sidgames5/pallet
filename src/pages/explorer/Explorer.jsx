@@ -56,7 +56,17 @@ function Explorer() {
                         {items.map((item) => <tr>
                             <td><Link to={`/explorer/item/${item.id}`}>{item.id}</Link></td>
                             <td><Link to={`/explorer/item/${item.id}`}>{item.name}</Link></td>
-                            <td><select className={`inline-block ${(function (status) {
+                            {item.stock != null ? <td>
+                                <span className={`inline-block text-white p-1 rounded-lg ${(function () {
+                                    if (item.stock > 10) {
+                                        return "bg-green-700";
+                                    } else if (item.stock > 0) {
+                                        return "bg-yellow-700";
+                                    } else if (item.stock === 0) {
+                                        return "bg-red-700";
+                                    }
+                                })()}`}>{item.stock} in stock</span>
+                            </td> : <td><select className={`inline-block ${(function (status) {
                                 switch (status.replace(" ", "").toLocaleLowerCase()) {
                                     case "checkedout":
                                         return "bg-red-700";
@@ -100,7 +110,7 @@ function Explorer() {
                                 }
 
                                 return things;
-                            })(item.status)}</select></td>
+                            })(item.status)}</select></td>}
                             <LocationsRow item={item} />
                             <td>{item.slot}</td>
                         </tr>)}
