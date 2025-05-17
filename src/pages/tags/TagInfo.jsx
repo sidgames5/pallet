@@ -66,74 +66,85 @@ export default function TagInfo() {
                 </div>
 
                 <div className="overflow-x-auto w-full">
-                                <table className="search-results w-full text-left rtl:text-right table-auto">
-                                    <thead class="text-white uppercase bg-sky-600">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>Building</th>
-                                            <th>Area</th>
-                                            <th>Shelf</th>
-                                            <th>Slot</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="*:border-gray-700 *:border-b-2 *:border-l-2 *:border-r-2">
-                                        {db.items.filter((item) => item.tags && item.tags.includes(parseInt(tagId))) 
-                                        .map((item) => <tr>
-                                            <td><Link to={`/explorer/item/${item.id}`}>{item.id}</Link></td>
-                                            <td><Link to={`/explorer/item/${item.id}`}>{item.name}</Link></td>
-                                            <td><select className={`inline-block ${(function (status) {
-                                                switch (status.replace(" ", "").toLocaleLowerCase()) {
-                                                    case "checkedout":
-                                                        return "bg-red-700";
-                                                    case "available":
-                                                        return "bg-green-700";
-                                                    default:
-                                                        return "bg-gray-700";
-                                                }
-                                            })(item.status)} text-white p-1 rounded-lg cursor-pointer`} onChange={(e) => {
-                                                axios.post("/api/edit", {
-                                                    objectId: item.id,
-                                                    category: "items",
-                                                    data: {
-                                                        status: e.currentTarget.value
-                                                    }
-                                                }).then(() => window.location.reload());
-                                            }}>{(function (status) {
-                                                const options = [];
-                                                const defaults = ["available", "checkedout", "unknown"]
-                                                options.push(status.toLocaleLowerCase().replace(" ", ""));
-                                                for (const o of defaults) {
-                                                    if (!options.includes(o)) {
-                                                        options.push(o);
-                                                    }
-                                                }
-                
-                                                const things = [];
-                
-                                                for (const o of options) {
-                                                    switch (o) {
-                                                        case "checkedout":
-                                                            things.push(<option value="checkedout">Checked out</option>);
-                                                            break;
-                                                        case "available":
-                                                            things.push(<option value="available">Available</option>);
-                                                            break;
-                                                        default:
-                                                            things.push(<option value="unknown">Unknown</option>);
-                                                            break;
-                                                    }
-                                                }
-                
-                                                return things;
-                                            })(item.status)}</select></td>
-                                            <LocationsRow item={item} />
-                                            <td>{item.slot}</td>
-                                        </tr>)}
-                                    </tbody>
-                                </table>
-                            </div>
+                    <table className="search-results w-full text-left rtl:text-right table-auto">
+                        <thead class="text-white uppercase bg-sky-600">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Building</th>
+                                <th>Area</th>
+                                <th>Shelf</th>
+                                <th>Slot</th>
+                            </tr>
+                        </thead>
+                        <tbody className="*:border-gray-700 *:border-b-2 *:border-l-2 *:border-r-2">
+                            {db.items.filter((item) => item.tags && item.tags.includes(parseInt(tagId)))
+                                .map((item) => <tr>
+                                    <td><Link to={`/explorer/item/${item.id}`}>{item.id}</Link></td>
+                                    <td><Link to={`/explorer/item/${item.id}`}>{item.name}</Link></td>
+                                    {item.stock != null ? <td>
+
+                                        <span className={`inline-block text-white p-1 rounded-lg ${(function () {
+                                            if (item.stock > 10) {
+                                                return "bg-green-700";
+                                            } else if (item.stock > 0) {
+                                                return "bg-yellow-700";
+                                            } else if (item.stock === 0) {
+                                                return "bg-red-700";
+                                            }
+                                        })()}`}>{item.stock} in stock</span>
+                                    </td> : <td><select className={`inline-block ${(function (status) {
+                                        switch (status.replace(" ", "").toLocaleLowerCase()) {
+                                            case "checkedout":
+                                                return "bg-red-700";
+                                            case "available":
+                                                return "bg-green-700";
+                                            default:
+                                                return "bg-gray-700";
+                                        }
+                                    })(item.status)} text-white p-1 rounded-lg cursor-pointer`} onChange={(e) => {
+                                        axios.post("/api/edit", {
+                                            objectId: item.id,
+                                            category: "items",
+                                            data: {
+                                                status: e.currentTarget.value
+                                            }
+                                        }).then(() => window.location.reload());
+                                    }}>{(function (status) {
+                                        const options = [];
+                                        const defaults = ["available", "checkedout", "unknown"]
+                                        options.push(status.toLocaleLowerCase().replace(" ", ""));
+                                        for (const o of defaults) {
+                                            if (!options.includes(o)) {
+                                                options.push(o);
+                                            }
+                                        }
+
+                                        const things = [];
+
+                                        for (const o of options) {
+                                            switch (o) {
+                                                case "checkedout":
+                                                    things.push(<option value="checkedout">Checked out</option>);
+                                                    break;
+                                                case "available":
+                                                    things.push(<option value="available">Available</option>);
+                                                    break;
+                                                default:
+                                                    things.push(<option value="unknown">Unknown</option>);
+                                                    break;
+                                            }
+                                        }
+
+                                        return things;
+                                    })(item.status)}</select></td>}
+                                    <LocationsRow item={item} />
+                                    <td>{item.slot}</td>
+                                </tr>)}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         ) : (
             <p>Loading...</p>
