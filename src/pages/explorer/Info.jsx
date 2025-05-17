@@ -256,42 +256,85 @@ function Info() {
             <div className="flex flex-col justify-center items-center mw-[90%]">
                 <div className="flex flex-row *:p-2 *:rounded-lg *:m-1">
                     {objectType === "item" ? (function () {
-                        return (
-                            <>
-                                {(obj?.status?.replace(" ", "").toLowerCase() ?? "") !== "available" ? (
-                                    <button
-                                        className="bg-green-700 text-white"
-                                        onClick={() => {
-                                            axios.post("/api/edit", {
-                                                objectId: objectId,
-                                                category: "items",
-                                                data: {
-                                                    status: "available"
-                                                }
-                                            }).then(() => window.location.reload());
-                                        }}
-                                    >
-                                        Check in
-                                    </button>
-                                ) : ""}
-                                {(obj?.status?.replace(" ", "").toLowerCase() ?? "") !== "checkedout" ? (
-                                    <button
-                                        className="bg-blue-700 text-white"
-                                        onClick={() => {
-                                            axios.post("/api/edit", {
-                                                objectId: objectId,
-                                                category: "items",
-                                                data: {
-                                                    status: "checkedout"
-                                                }
-                                            }).then(() => window.location.reload());
-                                        }}
-                                    >
-                                        Check out
-                                    </button>
-                                ) : ""}
-                            </>
-                        );
+                        if (obj.stock == null) {
+                            return (
+                                <>
+                                    {(obj?.status?.replace(" ", "").toLowerCase() ?? "") !== "available" ? (
+                                        <button
+                                            className="bg-green-700 text-white"
+                                            onClick={() => {
+                                                axios.post("/api/edit", {
+                                                    objectId: objectId,
+                                                    category: "items",
+                                                    data: {
+                                                        status: "available"
+                                                    }
+                                                }).then(() => window.location.reload());
+                                            }}
+                                        >
+                                            Check in
+                                        </button>
+                                    ) : ""}
+                                    {(obj?.status?.replace(" ", "").toLowerCase() ?? "") !== "checkedout" ? (
+                                        <button
+                                            className="bg-blue-700 text-white"
+                                            onClick={() => {
+                                                axios.post("/api/edit", {
+                                                    objectId: objectId,
+                                                    category: "items",
+                                                    data: {
+                                                        status: "checkedout"
+                                                    }
+                                                }).then(() => window.location.reload());
+                                            }}
+                                        >
+                                            Check out
+                                        </button>
+                                    ) : ""}
+                                </>
+                            );
+                        } else {
+                            return (
+                                <>
+                                    {(obj?.status?.replace(" ", "").toLowerCase() ?? "") !== "available" ? (
+                                        <button
+                                            className="bg-green-700 text-white"
+                                            onClick={() => {
+                                                const count = prompt("How many items to add", 1);
+                                                if (count == null) return;
+                                                axios.post("/api/edit", {
+                                                    objectId: objectId,
+                                                    category: "items",
+                                                    data: {
+                                                        stock: obj.stock + parseInt(count)
+                                                    }
+                                                }).then(() => window.location.reload());
+                                            }}
+                                        >
+                                            Add stock
+                                        </button>
+                                    ) : ""}
+                                    {(obj?.status?.replace(" ", "").toLowerCase() ?? "") !== "checkedout" ? (
+                                        <button
+                                            className="bg-blue-700 text-white"
+                                            onClick={() => {
+                                                const count = prompt("How many items to remove", 1);
+                                                if (count == null) return;
+                                                axios.post("/api/edit", {
+                                                    objectId: objectId,
+                                                    category: "items",
+                                                    data: {
+                                                        stock: Math.max(0, obj.stock - parseInt(count))
+                                                    }
+                                                }).then(() => window.location.reload());
+                                            }}
+                                        >
+                                            Remove stock
+                                        </button>
+                                    ) : ""}
+                                </>
+                            );
+                        }
                     })() : ""}
                     <button className="bg-red-700 text-white" onClick={() => {
                         if (window.confirm(`Are you sure you want to delete ${objectType}: ${obj.name}`)) {
