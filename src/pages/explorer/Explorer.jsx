@@ -57,6 +57,7 @@ function Explorer() {
                             <td><Link to={`/explorer/item/${item.id}`}>{item.id}</Link></td>
                             <td><Link to={`/explorer/item/${item.id}`}>{item.name}</Link></td>
                             {item.stock != null ? <td>
+
                                 <span className={`inline-block text-white p-1 rounded-lg ${(function () {
                                     if (item.stock > 10) {
                                         return "bg-green-700";

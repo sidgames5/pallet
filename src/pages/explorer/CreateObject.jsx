@@ -116,10 +116,10 @@ function CreateObject(props) {
                     <input type="number" name="slot" id="slot" required />
                 </div>}
 
-                <div className="flex flex-row align-middle gap-2">
+                {objectType === "item" && <div className="flex flex-row align-middle gap-2">
                     <label htmlFor="isConsumable">Consumable</label>
                     <input type="checkbox" name="isConsumable" id="isConsumable" onChange={(e) => setIsConsumable(e.target.checked)} />
-                </div>
+                </div>}
                 {(objectType === "item" && isConsumable) && <div className="flex flex-row align-middle">
                     <label htmlFor="stock">Stock: </label>
                     <input type="number" name="stock" id="stock" required />
