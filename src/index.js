@@ -14,6 +14,7 @@ import ToolsPage from './pages/tools/ToolsPage';
 import TagsLayout from './pages/tags/Layout';
 import Tags from './pages/tags/Tags';
 import TagInfo from './pages/tags/TagInfo';
+import BarcodePage from './pages/tools/barcode/BarcodePage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -29,12 +30,13 @@ root.render(
                     <Route path="shelf" element={<NoPage />} />
                     <Route path=":objectType/:objectId" element={<Info />} />
                 </Route>
-                <Route path="tags" element={<TagsLayout/>}>
-                    <Route index element={<Tags/>}/>
+                <Route path="tags" element={<TagsLayout />}>
+                    <Route index element={<Tags />} />
                     <Route path=":tagId" element={<TagInfo />} />
                 </Route>
                 <Route path="tools" element={<ToolsLayout />}>
                     <Route index element={<ToolsPage />} />
+                    <Route path="barcode" element={<BarcodePage />} />
                 </Route>
             </Route>
             <Route path="*" element={<NoPage />} />
