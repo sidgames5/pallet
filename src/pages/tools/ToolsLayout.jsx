@@ -3,7 +3,8 @@ import { NavLink, Outlet } from "react-router-dom";
 export default function ToolsLayout() {
     const links = [
         ["/tools", "Tools Home"],
-        ["/tools/barcode", "Barcode Generator"]
+        ["/tools/barcode", "Barcode Generator"],
+        ["/tools/bom", "BOM Restock Check"]
     ];
     return (<div className="flex flex-col items-center align-middle justify-center w-full h-full">
         <div className="topnav flex flex-row my-8 bg-gray-700 rounded-lg overflow-hidden">

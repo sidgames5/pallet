@@ -1,3 +1,6 @@
+import csv
+import io
+
 from flask import Flask, jsonify, request
 
 from backend.database import Database
@@ -8,6 +11,71 @@ app = Flask(__name__)
 @app.route("/api/read")
 def read():
     return jsonify(Database.data)
+
+
+@app.route("/api/check-bom", methods=["POST"])
+def check_bom():
+    options = request.get_json(silent=True) or {}
+    if not isinstance(options, dict):
+        return "A JSON object is required", 400
+    csv_text = options.get("csv")
+    id_column = options.get("idColumn")
+    quantity_column = options.get("quantityColumn")
+
+    if not isinstance(csv_text, str) or not csv_text.strip():
+        return "CSV data is required", 400
+    if not isinstance(id_column, str) or not isinstance(quantity_column, str):
+        return "ID and quantity columns are required", 400
+
+    try:
+        rows = csv.DictReader(io.StringIO(csv_text))
+        if not rows.fieldnames:
+            return "CSV header is required", 400
+        normalized_fields = {field.strip(): field for field in rows.fieldnames if field is not None}
+        if id_column not in normalized_fields or quantity_column not in normalized_fields:
+            return "Selected columns were not found in the CSV header", 400
+        id_field = normalized_fields[id_column]
+        quantity_field = normalized_fields[quantity_column]
+
+        requirements = {}
+        for line_number, row in enumerate(rows, start=2):
+            item_id = (row.get(id_field) or "").strip()
+            raw_quantity = (row.get(quantity_field) or "").strip()
+            if not item_id and not raw_quantity:
+                continue
+            if not item_id:
+                return f"Missing item ID on row {line_number}", 400
+            try:
+                quantity = float(raw_quantity)
+            except ValueError:
+                return f"Invalid quantity on row {line_number}", 400
+            if quantity <= 0 or not quantity.is_integer():
+                return f"Quantity on row {line_number} must be a positive whole number", 400
+            requirements[item_id] = requirements.get(item_id, 0) + int(quantity)
+    except csv.Error as error:
+        return f"Invalid CSV: {error}", 400
+
+    inventory = {str(item.get("id")): item for item in Database.data.get("items", [])}
+    restock = []
+    for item_id, required in requirements.items():
+        item = inventory.get(item_id)
+        stock = item.get("stock") if item else 0
+        stock = stock if isinstance(stock, (int, float)) and stock >= 0 else 0
+        if required > stock:
+            restock.append({
+                "id": item_id,
+                "name": item.get("name", "Unknown item") if item else "Item not found",
+                "required": required,
+                "stock": stock,
+                "restock": required - stock,
+                "found": item is not None,
+            })
+
+    return jsonify({
+        "restock": restock,
+        "checked": len(requirements),
+        "ready": len(restock) == 0,
+    })
 
 
 @app.route("/api/create", methods=["POST"])

@@ -15,6 +15,7 @@ import TagsLayout from './pages/tags/Layout';
 import Tags from './pages/tags/Tags';
 import TagInfo from './pages/tags/TagInfo';
 import BarcodePage from './pages/tools/barcode/BarcodePage';
+import BomPage from './pages/tools/bom/BomPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -36,6 +37,7 @@ root.render(
                 <Route path="tools" element={<ToolsLayout />}>
                     <Route index element={<ToolsPage />} />
                     <Route path="barcode" element={<BarcodePage />} />
+                    <Route path="bom" element={<BomPage />} />
                 </Route>
             </Route>
             <Route path="*" element={<NoPage />} />
