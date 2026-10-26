@@ -99,6 +99,8 @@ def create():
     if any(value.get("id") == object_id for value in Database.data[key]):
         return "ID already exists", 409
     data["id"] = object_id.strip()
+    if key == "items" and data.get("slot") is not None:
+        data["slot"] = str(data["slot"])
     Database.data[key].append(data)
     Database.save()
     return "OK", 201
@@ -127,6 +129,8 @@ def edit():
         if any(value.get("id") == new_id for value in Database.data[category] if value.get("id") != object_id):
             return "ID already exists", 409
         data["id"] = new_id
+    if category == "items" and data.get("slot") is not None:
+        data["slot"] = str(data["slot"])
 
     Database.data[category][index].update(data)
     if new_id is not None and new_id != object_id:

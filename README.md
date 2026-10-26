@@ -33,8 +33,8 @@ quantities that need restocking before the pick can be completed.
 ## Data model
 
 Buildings, areas, items, and tags use caller-provided string IDs. Items can be
-associated with a building and area; shelves and slots are no longer part of
-the data model.
+associated with a building, area, and string slot. Shelves are not part of the
+data model.
 
 ## Contributing
 

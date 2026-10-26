@@ -47,6 +47,7 @@ function Explorer() {
                             <th>Status</th>
                             <th>Building</th>
                             <th>Area</th>
+                            <th>Slot</th>
                         </tr>
                     </thead>
                     <tbody className="*:border-gray-700 *:border-b-2 *:border-l-2 *:border-r-2">
@@ -84,6 +85,7 @@ function Explorer() {
                                 }}>Check out</button>}
                             </td>}
                             <LocationsRow item={item} />
+                            <td>{item.slot || ""}</td>
                         </tr>)}
                     </tbody>
                 </table>
@@ -112,6 +114,7 @@ function Explorer() {
                                 name: formData.get("name"),
                                 building: formData.get("building"),
                                 area: formData.get("area"),
+                                slot: formData.get("slot"),
                                 status: isConsumable ? "Unknown" : "available",
                                 tags: []
                             };

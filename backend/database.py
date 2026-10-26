@@ -25,10 +25,11 @@ class Database:
                 for field in ("building", "area"):
                     if field in value and value[field] is not None:
                         value[field] = str(value[field])
+                if "slot" in value and value["slot"] is not None:
+                    value["slot"] = str(value["slot"])
                 if isinstance(value.get("tags"), list):
                     value["tags"] = [str(tag_id) for tag_id in value["tags"]]
                 value.pop("shelf", None)
-                value.pop("slot", None)
 
         Database.save()
 

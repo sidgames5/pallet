@@ -310,7 +310,8 @@ function Info() {
                         })(),
                         data: {
                             id: formData.get("id").trim(),
-                            name: formData.get("name")
+                            name: formData.get("name"),
+                            ...(objectType === "item" ? { slot: formData.get("slot") } : {})
                         }
                     }).then(() => {
                         window.location.href = `/explorer/${objectType}/${formData.get("id").trim()}`;
@@ -326,6 +327,10 @@ function Info() {
                         <label htmlFor="name">Name: </label>
                         <input type="text" name="name" id="name" defaultValue={obj.name} />
                     </div>
+                    {objectType === "item" && <div className="flex flex-row items-center">
+                        <label htmlFor="slot">Slot: </label>
+                        <input type="text" name="slot" id="slot" defaultValue={obj.slot || ""} />
+                    </div>}
                     <button type="submit" className="bg-gray-700 p-2 rounded-lg text-white mt-4 hover:bg-sky-600 transition-all duration-300">Update</button>
                 </form>
             </div>
