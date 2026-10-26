@@ -14,7 +14,7 @@ function SearchBarcodeForm() {
     const [errorText, setErrorText] = useState("");
     const [hasError, setHasError] = useState(false);
     const [barcodeScanModalVisible, setBarcodeScanModalVisible] = useState(false);
-    let id = 0;
+    let id = "";
     return (
         <>
             <form className="search-filters flex flex-row justify-center items-center gap-8 m-4" onSubmit={(e) => {
@@ -22,7 +22,7 @@ function SearchBarcodeForm() {
                 axios.get("/api/read").then((res) => {
                     let found = false;
                     for (let o of res.data.items) {
-                        if (o.id === id) {
+                        if (o.id === id.trim()) {
                             found = true;
                             window.location.href = `/explorer/item/${id}`;
                         }
@@ -36,7 +36,7 @@ function SearchBarcodeForm() {
                 <div className="flex flex-col items-center">
                     <label htmlFor="id">Barcode or ID</label>
                     <div className="relative">
-                        <input type="number" name="id" id="id" required onChange={(e) => id = parseInt(e.currentTarget.value)} />
+                        <input type="text" name="id" id="id" required onChange={(e) => id = e.currentTarget.value} />
                         <span className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer" onClick={() => { setBarcodeScanModalVisible(true) }}><FontAwesomeIcon icon={faCamera} /></span>
                     </div>
                 </div>

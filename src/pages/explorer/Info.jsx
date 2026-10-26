@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Database from "../../utils/Database";
 import NoPage from "../NoPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faDoorOpen, faPallet, faWarehouse } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faDoorOpen, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import JsBarcode from "jsbarcode";
@@ -60,60 +60,17 @@ function Info() {
         setEffectSelectionDone(true);
     }, [db, selectedBuilding]);
 
-    // const locations = Database.resolveLocations(object); 
-
     const [obj, setObj] = useState(null);
-    // let obj = (function (type, id, database) {
-    //     if (!db || !type || !id) {
-    //         console.error('Missing required data:', { db, type, id });
-    //         return null;
-    //     }
-    //     switch (type) {
-    //         case "item":
-    //             for (const v of database.items) {
-    //                 if (v.id === parseInt(id)) {
-    //                     return v;
-    //                 }
-    //             }
-    //             break;
-    //         case "building":
-    //             for (const v of database.buildings) {
-    //                 if (v.id === parseInt(id)) {
-    //                     return v;
-    //                 }
-    //             }
-    //             break;
-    //         case "area":
-    //             for (const v of database.areas) {
-    //                 if (v.id === parseInt(id)) {
-    //                     return v;
-    //                 }
-    //             }
-    //             break;
-    //         case "shelf":
-    //             for (const v of database.shelves) {
-    //                 if (v.id === parseInt(id)) {
-    //                     return v;
-    //                 }
-    //             }
-    //             break;
-    //         default:
-    //             return null;
-    //     }
-    //     return null;
-    // })(objectType, objectId, db);
     useEffect(() => {
         if (db && objectType && objectId) {
             const result = (function (type, id) {
                 switch (type) {
                     case "item":
-                        return db.items.find(v => v.id === parseInt(id)) || null;
+                        return db.items.find(v => v.id === id) || null;
                     case "building":
-                        return db.buildings.find(v => v.id === parseInt(id)) || null;
+                        return db.buildings.find(v => v.id === id) || null;
                     case "area":
-                        return db.areas.find(v => v.id === parseInt(id)) || null;
-                    case "shelf":
-                        return db.shelves.find(v => v.id === parseInt(id)) || null;
+                        return db.areas.find(v => v.id === id) || null;
                     default:
                         return null;
                 }
@@ -204,10 +161,8 @@ function Info() {
                         return "Unknown";
                 }
             })(obj.status)}</span> : ""}
-            {["area", "shelf", "item"].includes(objectType) ? <Link to={`/explorer/building/${locations.buildingId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faWarehouse} />{locations.building}</Link> : ""}
-            {["shelf", "item"].includes(objectType) ? <Link to={`/explorer/area/${locations.areaId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faDoorOpen} />{locations.area}</Link> : ""}
-            {objectType === "item" ? <Link to={`/explorer/shelf/${locations.shelfId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faPallet} />{locations.shelf}</Link> : ""}
-            {objectType === "item" ? <span className="inline-block bg-gray-700 text-white">Slot {obj.slot}</span> : ""}
+            {["area", "item"].includes(objectType) ? <Link to={`/explorer/building/${locations.buildingId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faWarehouse} />{locations.building}</Link> : ""}
+            {objectType === "item" ? <Link to={`/explorer/area/${locations.areaId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faDoorOpen} />{locations.area}</Link> : ""}
         </div>
         <div className="grid md:grid-cols-2 grid-cols-1 gap-10">
             {objectType !== "item" ? <div className="flex flex-col justify-center items-center overflow-y-auto text-wrap">
@@ -218,9 +173,6 @@ function Info() {
                             parentObject = db.areas;
                             break;
                         case "area":
-                            parentObject = db.shelves;
-                            break;
-                        case "shelf":
                             parentObject = db.items;
                             break;
                         default:
@@ -233,13 +185,8 @@ function Info() {
                                     return "";
                                 }
                                 break;
-                            case "shelf":
-                                if (child.area !== obj.id) {
-                                    return "";
-                                }
-                                break;
                             case "item":
-                                if (child.shelf !== obj.id) {
+                                if (objectType === "building" ? child.building !== obj.id : child.area !== obj.id) {
                                     return "";
                                 }
                                 break;
@@ -341,11 +288,7 @@ function Info() {
                             axios.post("/api/delete", {
                                 objectId: objectId,
                                 category: (function () {
-                                    if (objectType === "shelf") {
-                                        return "shelves"
-                                    } else {
-                                        return objectType + "s";
-                                    }
+                                    return objectType + "s";
                                 })()
                             }).then(() => window.location.href = "/explorer");
                         }
@@ -362,8 +305,6 @@ function Info() {
                                     return "buildings";
                                 case "area":
                                     return "areas";
-                                case "shelf":
-                                    return "shelves";
                                 case "item":
                                     return "items";
                                 default:
@@ -371,10 +312,19 @@ function Info() {
                             }
                         })(),
                         data: {
+                            id: formData.get("id").trim(),
                             name: formData.get("name")
                         }
-                    }).then(() => window.location.reload());
+                    }).then(() => {
+                        window.location.href = `/explorer/${objectType}/${formData.get("id").trim()}`;
+                    }).catch((error) => {
+                        console.error("Error updating object:", error);
+                    });
                 }}>
+                    <div className="flex flex-row items-center">
+                        <label htmlFor="id">ID: </label>
+                        <input type="text" name="id" id="id" defaultValue={obj.id} required />
+                    </div>
                     <div className="flex flex-row items-center">
                         <label htmlFor="name">Name: </label>
                         <input type="text" name="name" id="name" defaultValue={obj.name} />
@@ -386,6 +336,12 @@ function Info() {
                 <form className="flex flex-col items-center justify-center gap-1 mt-1" onSubmit={(e) => {
                     e.preventDefault();
                     const formData = new FormData(e.target);
+                    const locationData = {
+                        building: formData.get("building")
+                    };
+                    if (objectType === "item") {
+                        locationData.area = formData.get("area");
+                    }
                     axios.post("/api/edit", {
                         objectId: objectId,
                         category: (function () {
@@ -394,33 +350,26 @@ function Info() {
                                     return "buildings";
                                 case "area":
                                     return "areas";
-                                case "shelf":
-                                    return "shelves";
                                 case "item":
                                     return "items";
                                 default:
                                     return null;
                             }
                         })(),
-                        data: {
-                            building: formData.get("building"),
-                            area: formData.get("area"),
-                            shelf: formData.get("shelf"),
-                            slot: formData.get("slot")
-                        }
+                        data: locationData
                     }).then(() => window.location.reload());
                 }}>
                     {objectType !== "building" && <div className="flex flex-row align-middle">
                         <label htmlFor="building">Building: </label>
                         {/* <input type="number" name="building" id="building" required /> */}
-                        <select name="building" id="building" onChange={(e) => { setSelectedBuilding(parseInt(e.currentTarget.value)) }} value={selectedBuilding} required>
+                        <select name="building" id="building" onChange={(e) => { setSelectedBuilding(e.currentTarget.value) }} value={selectedBuilding} required>
                             {db.buildings.map((object) => <option value={object.id}>{object.name}</option>)}
                         </select>
                     </div>}
-                    {["item", "shelf"].includes(objectType) && <div className="flex flex-row align-middle">
+                    {objectType === "item" && <div className="flex flex-row align-middle">
                         <label htmlFor="area">Area: </label>
                         {/* <input type="number" name="area" id="area" required /> */}
-                        <select name="area" id="area" onChange={(e) => { setSelectedArea(parseInt(e.currentTarget.value)) }} value={selectedArea} required>
+                        <select name="area" id="area" onChange={(e) => { setSelectedArea(e.currentTarget.value) }} value={selectedArea} required>
                             {db.areas.map((object) => {
                                 if (object.building === selectedBuilding) {
                                     return <option value={object.id}>{object.name}</option>;
@@ -428,22 +377,6 @@ function Info() {
                                 return "";
                             })}
                         </select>
-                    </div>}
-                    {["item"].includes(objectType) && <div className="flex flex-row align-middle">
-                        <label htmlFor="shelf">Shelf: </label>
-                        {/* <input type="number" name="shelf" id="shelf" required /> */}
-                        <select name="shelf" id="shelf" required>
-                            {db.shelves.map((object) => {
-                                if (object.area === selectedArea) {
-                                    return <option value={object.id}>{object.name}</option>;
-                                }
-                                return "";
-                            })}
-                        </select>
-                    </div>}
-                    {objectType === "item" && <div className="flex flex-row align-middle">
-                        <label htmlFor="slot">Slot: </label>
-                        <input type="number" name="slot" id="slot" defaultValue={obj.slot} required />
                     </div>}
                     <button type="submit" className="p-2 rounded-lg bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Move</button>
                 </form>
@@ -492,7 +425,7 @@ function Info() {
                         onSubmit={(e) => {
                             e.preventDefault();
                             const formData = new FormData(e.target);
-                            const newTagId = parseInt(formData.get("newTag"), 10);
+                            const newTagId = formData.get("newTag").trim();
                             if (!newTagId || obj.tags.includes(newTagId)) return;
 
                             axios.post("/api/edit", {

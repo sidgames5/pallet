@@ -14,25 +14,22 @@ class Database {
     }
 
     static create(data) {
-        axios.post("/api/create", data);
+        return axios.post("/api/create", data);
     }
 
     static resolveLocations(obj) {
         let building = null;
-        let buildingId = 0;
+        let buildingId = null;
         let area = null;
-        let areaId = 0;
-        let shelf = null;
-        let shelfId = 0;
+        let areaId = null;
 
         if (obj == null || obj === undefined) {
             console.warn("Null object provided");
             return null;
         }
 
-        buildingId = parseInt(obj.building);
-        areaId = parseInt(obj.area);
-        shelfId = parseInt(obj.shelf);
+        buildingId = obj.building;
+        areaId = obj.area;
 
         return Database.read().then((db) => {
             for (const element of db.buildings) {
@@ -47,19 +44,11 @@ class Database {
                 }
             }
 
-            for (const element of db.shelves) {
-                if (element.id === shelfId) {
-                    shelf = element.name;
-                }
-            }
-
             return {
                 building: building,
                 buildingId: buildingId,
                 area: area,
-                areaId: areaId,
-                shelf: shelf,
-                shelfId: shelfId
+                areaId: areaId
             };
         });
     }

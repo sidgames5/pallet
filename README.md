@@ -23,6 +23,12 @@ npm run start
 ```
 4. Open your browser to [localhost:3000](http://localhost:3000)
 
+## Data model
+
+Buildings, areas, items, and tags use caller-provided string IDs. Items can be
+associated with a building and area; shelves and slots are no longer part of
+the data model.
+
 ## Contributing
 
 This project is in very early development. Any contributions are greatly appreciated.

@@ -1,4 +1,4 @@
-import { faBox, faDoorOpen, faPallet, faWarehouse } from "@fortawesome/free-solid-svg-icons";
+import { faBox, faDoorOpen, faWarehouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, NavLink } from "react-router-dom";
 
@@ -13,7 +13,6 @@ const Dashboard = () => {
             id: 1
         },
         {
-            type: "shelf",
             name: "A7",
             timestamp: 1736901505,
             id: 2
@@ -55,8 +54,6 @@ const Dashboard = () => {
                             switch (type) {
                                 case "item":
                                     return faBox;
-                                case "shelf":
-                                    return faPallet;
                                 case "area":
                                     return faDoorOpen;
                                 case "building":

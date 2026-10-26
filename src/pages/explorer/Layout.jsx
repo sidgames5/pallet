@@ -35,20 +35,6 @@ const Layout = () => {
         f();
     }, []);
 
-    const [shelves, setShelves] = useState([]);
-    useEffect(() => {
-        async function f() {
-            try {
-                const data = await Database.read();
-                setShelves(data.shelves || []);
-            } catch (error) {
-                console.error("Error: ", error);
-                setShelves([]);
-            }
-        }
-        f();
-    }, []);
-
     const [barcodeSearch, setBarcodeSearch] = useState(false);
     const [searchType, setSearchType] = useState("filters");
 
@@ -60,7 +46,7 @@ const Layout = () => {
                     <button className={searchType === "name" && "bg-sky-600"} onClick={() => setSearchType("name")}>Search</button>
                     <button className={searchType === "barcode" && "bg-sky-600 rounded-r-lg"} onClick={() => setSearchType("barcode")}>Barcode/ID</button>
                 </div>
-                {searchType === "filters" && <SearchFilterForm buildings={buildings} areas={areas} shelves={shelves} />}
+                {searchType === "filters" && <SearchFilterForm buildings={buildings} areas={areas} />}
                 {searchType === "name" && <SearchTextForm />}
                 {searchType === "barcode" && <SearchBarcodeForm />}
             </div>

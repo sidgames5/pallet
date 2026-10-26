@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 function SearchFilterForm(props) {
     const buildings = props.buildings;
     const areas = props.areas;
-    const shelves = props.shelves;
-
 
     const [selectedBuilding, setSelectedBuilding] = useState(0);
     const [selectedArea, setSelectedArea] = useState(0);
@@ -30,26 +28,15 @@ function SearchFilterForm(props) {
         <form className="search-filters flex lg:flex-row flex-wrap justify-center items-center gap-8 m-4">
             <div className="flex flex-col items-center">
                 <label htmlFor="building">Building</label>
-                <select name="building" id="building" onChange={(e) => { setSelectedBuilding(parseInt(e.currentTarget.value)) }}>
+                <select name="building" id="building" onChange={(e) => { setSelectedBuilding(e.currentTarget.value) }}>
                     {buildings.map((object) => <option value={object.id}>{object.name}</option>)}
                 </select>
             </div>
             <div className="flex flex-col items-center">
                 <label htmlFor="area">Room</label>
-                <select name="area" id="area" onChange={(e) => { setSelectedArea(parseInt(e.currentTarget.value)) }} value={selectedArea} >
+                <select name="area" id="area" onChange={(e) => { setSelectedArea(e.currentTarget.value) }} value={selectedArea} >
                     {areas.map((object) => (function () {
                         if (object.building === selectedBuilding) {
-                            return <option value={object.id}>{object.name}</option>;
-                        }
-                        return "";
-                    })())}
-                </select>
-            </div>
-            <div className="flex flex-col items-center">
-                <label htmlFor="shelf">Shelf</label>
-                <select name="shelf" id="shelf">
-                    {shelves.map((object) => (function () {
-                        if (object.area === selectedArea) {
                             return <option value={object.id}>{object.name}</option>;
                         }
                         return "";

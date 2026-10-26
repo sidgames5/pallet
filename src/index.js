@@ -27,7 +27,6 @@ root.render(
                     <Route path="item" element={<NoPage />} />
                     <Route path="building" element={<NoPage />} />
                     <Route path="area" element={<NoPage />} />
-                    <Route path="shelf" element={<NoPage />} />
                     <Route path=":objectType/:objectId" element={<Info />} />
                 </Route>
                 <Route path="tags" element={<TagsLayout />}>

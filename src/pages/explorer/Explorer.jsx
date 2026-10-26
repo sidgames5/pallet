@@ -16,9 +16,8 @@ function Explorer() {
             try {
                 const db = await Database.read();
                 const filteredItems = db.items.filter(v =>
-                    (!searchParams.has("building") || v.building === parseInt(searchParams.get("building"))) &&
-                    (!searchParams.has("area") || v.area === parseInt(searchParams.get("area"))) &&
-                    (!searchParams.has("shelf") || v.shelf === parseInt(searchParams.get("shelf")))
+                    (!searchParams.has("building") || v.building === searchParams.get("building")) &&
+                    (!searchParams.has("area") || v.area === searchParams.get("area"))
                 );
                 const textFilteredItems = filteredItems.filter(v => {
                     if (!searchParams.has("q")) {
@@ -48,8 +47,6 @@ function Explorer() {
                             <th>Status</th>
                             <th>Building</th>
                             <th>Area</th>
-                            <th>Shelf</th>
-                            <th>Slot</th>
                         </tr>
                     </thead>
                     <tbody className="*:border-gray-700 *:border-b-2 *:border-l-2 *:border-r-2">
@@ -113,7 +110,6 @@ function Explorer() {
                                 return things;
                             })(item.status)}</select></td>}
                             <LocationsRow item={item} />
-                            <td>{item.slot}</td>
                         </tr>)}
                     </tbody>
                 </table>
@@ -128,13 +124,7 @@ function Explorer() {
                     const type = formData.get("type");
 
                     const requestData = {
-                        key: (function () {
-                            if (type === "shelf") {
-                                return "shelves"
-                            } else {
-                                return type + "s";
-                            }
-                        })(),
+                        key: type + "s",
                         data: {}
                     };
 
@@ -148,34 +138,27 @@ function Explorer() {
                         case "item":
                             requestData.data = {
                                 type: "item",
+                                id: formData.get("id").trim(),
                                 name: formData.get("name"),
-                                building: parseInt(formData.get("building")),
-                                area: parseInt(formData.get("area")),
-                                shelf: parseInt(formData.get("shelf")),
-                                slot: parseInt(formData.get("slot")),
+                                building: formData.get("building"),
+                                area: formData.get("area"),
                                 status: "Unknown",
                                 stock: stock,
                                 tags: []
                             };
                             break;
-                        case "shelf":
-                            requestData.data = {
-                                type: "shelf",
-                                name: formData.get("name"),
-                                building: parseInt(formData.get("building")),
-                                area: parseInt(formData.get("area"))
-                            };
-                            break;
                         case "area":
                             requestData.data = {
                                 type: "area",
+                                id: formData.get("id").trim(),
                                 name: formData.get("name"),
-                                building: parseInt(formData.get("building"))
+                                building: formData.get("building")
                             };
                             break;
                         case "building":
                             requestData.data = {
                                 type: "building",
+                                id: formData.get("id").trim(),
                                 name: formData.get("name")
                             };
                             break;
@@ -184,28 +167,11 @@ function Explorer() {
                             return;
                     }
 
-                    Database.create(requestData);
-                    Database.read().then((d) => {
-                        let path = `/explorer/${type}/`;
-                        switch (type) {
-                            case "item":
-                                path += d.items[d.items.length - 1].id;
-                                break;
-                            case "shelf":
-                                path += d.shelves[d.shelves.length - 1].id;
-                                break;
-                            case "area":
-                                path += d.areas[d.areas.length - 1].id;
-                                break;
-                            case "building":
-                                path += d.buildings[d.buildings.length - 1].id;
-                                break;
-                            default:
-                                alert("Invalid data");
-                                return;
-                        }
-                        window.location.href = path;
-                    })
+                    Database.create(requestData).then(() => {
+                        window.location.href = `/explorer/${type}/${requestData.data.id}`;
+                    }).catch((error) => {
+                        console.error("Error creating object:", error);
+                    });
                 }} />}
         </>
     );

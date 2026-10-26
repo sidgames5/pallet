@@ -13,6 +13,10 @@ export default function CreateTag({ onSubmit, onClose }) {
                 onSubmit(e);
             }}>
             <div className="flex flex-row align-middle">
+                <label htmlFor="id">ID: </label>
+                <input type="text" name="id" id="id" required />
+            </div>
+            <div className="flex flex-row align-middle">
                 <label htmlFor="name">Name: </label>
                 <input type="text" name="name" id="name" required />
             </div>

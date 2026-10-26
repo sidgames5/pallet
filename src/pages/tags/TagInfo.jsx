@@ -40,7 +40,7 @@ export default function TagInfo() {
 
     useEffect(() => {
         if (db && effectDbDone) {
-            const tag = db.tags.find(tag => tag.id === parseInt(tagId));
+            const tag = db.tags.find(tag => tag.id === tagId);
             if (tag) {
                 setTag(tag);
             } else {
@@ -64,6 +64,23 @@ export default function TagInfo() {
                         <p>{tag.description}</p>
                     </div>
                 </div>
+                <form className="flex flex-row items-center gap-2" onSubmit={(e) => {
+                    e.preventDefault();
+                    const newId = new FormData(e.currentTarget).get("id").trim();
+                    axios.post("/api/edit", {
+                        objectId: tagId,
+                        category: "tags",
+                        data: { id: newId }
+                    }).then(() => {
+                        window.location.href = `/tags/${newId}`;
+                    }).catch((error) => {
+                        console.error("Error updating tag ID:", error);
+                    });
+                }}>
+                    <label htmlFor="tag-id">ID: </label>
+                    <input type="text" name="id" id="tag-id" defaultValue={tag.id} required />
+                    <button type="submit" className="bg-gray-700 p-2 rounded-lg text-white hover:bg-sky-600 transition-all duration-300">Update ID</button>
+                </form>
 
                 <div className="overflow-x-auto w-full">
                     <table className="search-results w-full text-left rtl:text-right table-auto">
@@ -74,12 +91,10 @@ export default function TagInfo() {
                                 <th>Status</th>
                                 <th>Building</th>
                                 <th>Area</th>
-                                <th>Shelf</th>
-                                <th>Slot</th>
                             </tr>
                         </thead>
                         <tbody className="*:border-gray-700 *:border-b-2 *:border-l-2 *:border-r-2">
-                            {db.items.filter((item) => item.tags && item.tags.includes(parseInt(tagId)))
+                            {db.items.filter((item) => item.tags && item.tags.includes(tagId))
                                 .map((item) => <tr>
                                     <td><Link to={`/explorer/item/${item.id}`}>{item.id}</Link></td>
                                     <td><Link to={`/explorer/item/${item.id}`}>{item.name}</Link></td>
@@ -140,7 +155,6 @@ export default function TagInfo() {
                                         return things;
                                     })(item.status)}</select></td>}
                                     <LocationsRow item={item} />
-                                    <td>{item.slot}</td>
                                 </tr>)}
                         </tbody>
                     </table>

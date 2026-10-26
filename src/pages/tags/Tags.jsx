@@ -79,17 +79,18 @@ export default function Tags() {
                 const requestData = {
                     key: "tags",
                     data: {
+                        id: formData.get("id").trim(),
                         name: formData.get("name"),
                         description: formData.get("description"),
                         color: formData.get("color")
                     }
                 };
 
-                Database.create(requestData);
-                Database.read().then((d) => {
-                    let path = `/tags/${d.tags[d.tags.length - 1].id}/`;
-                    window.location.href = path;
-                })
+                Database.create(requestData).then(() => {
+                    window.location.href = `/tags/${requestData.data.id}/`;
+                }).catch((error) => {
+                    console.error("Error creating tag:", error);
+                });
             }}
         />}
     </div>;

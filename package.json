@@ -2,7 +2,7 @@
     "name": "pallet",
     "version": "1.0.0-dev",
     "private": true,
-    "proxy": "http://localhost:5000/",
+    "proxy": "http://localhost:5001/",
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",

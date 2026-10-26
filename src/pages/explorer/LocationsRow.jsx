@@ -6,8 +6,7 @@ function LocationsRow(props) {
     const item = props.item;
     const [locations, setLocations] = useState({
         building: "",
-        area: "",
-        shelf: ""
+        area: ""
     });
     useEffect(() => {
         Database.resolveLocations(item)
@@ -20,7 +19,6 @@ function LocationsRow(props) {
         <>
             <td><Link to={`/explorer/building/${item.building}`}>{locations.building}</Link></td>
             <td><Link to={`/explorer/area/${item.area}`}>{locations.area}</Link></td>
-            <td><Link to={`/explorer/shelf/${item.shelf}`}>{locations.shelf}</Link></td>
         </>
     );
 }
