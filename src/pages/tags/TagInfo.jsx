@@ -109,51 +109,25 @@ export default function TagInfo() {
                                                 return "bg-red-700";
                                             }
                                         })()}`}>{item.stock} in stock</span>
-                                    </td> : <td><select className={`inline-block ${(function (status) {
-                                        switch (status.replace(" ", "").toLocaleLowerCase()) {
-                                            case "checkedout":
-                                                return "bg-red-700";
-                                            case "available":
-                                                return "bg-green-700";
-                                            default:
-                                                return "bg-gray-700";
-                                        }
-                                    })(item.status)} text-white p-1 rounded-lg cursor-pointer`} onChange={(e) => {
-                                        axios.post("/api/edit", {
-                                            objectId: item.id,
-                                            category: "items",
-                                            data: {
-                                                status: e.currentTarget.value
-                                            }
-                                        }).then(() => window.location.reload());
-                                    }}>{(function (status) {
-                                        const options = [];
-                                        const defaults = ["available", "checkedout", "unknown"]
-                                        options.push(status.toLocaleLowerCase().replace(" ", ""));
-                                        for (const o of defaults) {
-                                            if (!options.includes(o)) {
-                                                options.push(o);
-                                            }
-                                        }
-
-                                        const things = [];
-
-                                        for (const o of options) {
-                                            switch (o) {
-                                                case "checkedout":
-                                                    things.push(<option value="checkedout">Checked out</option>);
-                                                    break;
-                                                case "available":
-                                                    things.push(<option value="available">Available</option>);
-                                                    break;
-                                                default:
-                                                    things.push(<option value="unknown">Unknown</option>);
-                                                    break;
-                                            }
-                                        }
-
-                                        return things;
-                                    })(item.status)}</select></td>}
+                                    </td> : <td>
+                                        <span className={`inline-block text-white p-1 rounded-lg mr-2 ${(item.status || "").replace(" ", "").toLocaleLowerCase() === "checkedout" ? "bg-red-700" : "bg-green-700"}`}>
+                                            {(item.status || "").replace(" ", "").toLocaleLowerCase() === "checkedout" ? "Checked out" : "Available"}
+                                        </span>
+                                        {(item.status || "").replace(" ", "").toLocaleLowerCase() !== "available" && <button className="bg-green-700 text-white p-1 rounded-lg mr-1" onClick={() => {
+                                            axios.post("/api/edit", {
+                                                objectId: item.id,
+                                                category: "items",
+                                                data: { status: "available" }
+                                            }).then(() => window.location.reload());
+                                        }}>Check in</button>}
+                                        {(item.status || "").replace(" ", "").toLocaleLowerCase() !== "checkedout" && <button className="bg-blue-700 text-white p-1 rounded-lg" onClick={() => {
+                                            axios.post("/api/edit", {
+                                                objectId: item.id,
+                                                category: "items",
+                                                data: { status: "checkedout" }
+                                            }).then(() => window.location.reload());
+                                        }}>Check out</button>}
+                                    </td>}
                                     <LocationsRow item={item} />
                                 </tr>)}
                         </tbody>

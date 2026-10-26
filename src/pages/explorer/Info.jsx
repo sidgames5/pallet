@@ -146,10 +146,7 @@ function Info() {
                         return "bg-gray-700";
                 }
             })(obj.status)} text-white`}>{(function (status) {
-                if (obj.status == null) {
-                    return "bg-gray-700";
-                }
-                switch (obj.status) {
+                switch ((status || "").replace(" ", "").toLocaleLowerCase()) {
                     case "checkedout":
                         return "Checked out";
                     case "available":
@@ -158,7 +155,7 @@ function Info() {
                         if (obj.stock != null) {
                             return `${obj.stock} in stock`;
                         }
-                        return "Unknown";
+                        return "Status unknown";
                 }
             })(obj.status)}</span> : ""}
             {["area", "item"].includes(objectType) ? <Link to={`/explorer/building/${locations.buildingId}`} className="inline-block bg-gray-700 text-white *:mr-1"><FontAwesomeIcon icon={faWarehouse} />{locations.building}</Link> : ""}

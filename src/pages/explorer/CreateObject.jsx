@@ -108,7 +108,7 @@ function CreateObject(props) {
                 </div>}
                 {(objectType === "item" && isConsumable) && <div className="flex flex-row align-middle">
                     <label htmlFor="stock">Stock: </label>
-                    <input type="number" name="stock" id="stock" required />
+                    <input type="number" name="stock" id="stock" min="0" required />
                 </div>}
                 <button type="submit" className="p-2 rounded-lg bg-gray-700 hover:bg-sky-600 transition-all duration-300 text-white">Create</button>
             </form>

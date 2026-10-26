@@ -20,6 +20,8 @@ class Database:
             for value in Database.data.setdefault(category, []):
                 if "id" in value:
                     value["id"] = str(value["id"])
+                if category == "items" and value.get("stock") == -1:
+                    value.pop("stock")
                 for field in ("building", "area"):
                     if field in value and value[field] is not None:
                         value[field] = str(value[field])
