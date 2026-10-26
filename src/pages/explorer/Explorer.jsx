@@ -115,6 +115,7 @@ function Explorer() {
                                 building: formData.get("building"),
                                 area: formData.get("area"),
                                 slot: formData.get("slot"),
+                                reorderLink: formData.get("reorderLink"),
                                 status: isConsumable ? "Unknown" : "available",
                                 tags: []
                             };

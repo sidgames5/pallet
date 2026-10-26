@@ -29,7 +29,8 @@ Open **Tools → BOM Restock Check**, paste CSV or TSV data, choose whether to
 search by item ID or name, and select the matching column and required quantity
 column. Pallet combines duplicate item rows and compares the total required
 quantity against current item stock, showing the items and quantities that need
-restocking before the pick can be completed.
+restocking before the pick can be completed. Items can also have a reorder link,
+which appears as a button in the results for items that need more stock.
 
 ## Data model
 

@@ -85,6 +85,7 @@ def check_bom():
             restock.append({
                 "id": str(item.get("id")) if item else item_id,
                 "name": item.get("name", "Unknown item") if item else "Item not found",
+                "reorderLink": item.get("reorderLink") if item else None,
                 "required": required,
                 "stock": stock,
                 "restock": required - stock,
@@ -121,6 +122,8 @@ def create():
     data["id"] = object_id.strip()
     if key == "items" and data.get("slot") is not None:
         data["slot"] = str(data["slot"])
+    if key == "items" and data.get("reorderLink") is not None:
+        data["reorderLink"] = str(data["reorderLink"])
     Database.data[key].append(data)
     Database.save()
     return "OK", 201
@@ -151,6 +154,8 @@ def edit():
         data["id"] = new_id
     if category == "items" and data.get("slot") is not None:
         data["slot"] = str(data["slot"])
+    if category == "items" and data.get("reorderLink") is not None:
+        data["reorderLink"] = str(data["reorderLink"])
 
     Database.data[category][index].update(data)
     if new_id is not None and new_id != object_id:

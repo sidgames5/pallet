@@ -114,7 +114,7 @@ export default function BomPage() {
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead className="text-white bg-sky-600">
-                                    <tr><th className="p-2">ID</th><th className="p-2">Item</th><th className="p-2">Required</th><th className="p-2">In stock</th><th className="p-2">Restock</th></tr>
+                                    <tr><th className="p-2">ID</th><th className="p-2">Item</th><th className="p-2">Required</th><th className="p-2">In stock</th><th className="p-2">Restock</th><th className="p-2">Reorder</th></tr>
                                 </thead>
                                 <tbody>
                                     {result.restock.map((item) => (
@@ -124,6 +124,18 @@ export default function BomPage() {
                                             <td className="p-2">{item.required}</td>
                                             <td className="p-2">{item.stock}</td>
                                             <td className="p-2 font-bold">{item.restock}</td>
+                                            <td className="p-2">
+                                                {item.reorderLink && /^https?:\/\//i.test(item.reorderLink) && (
+                                                    <a
+                                                        href={item.reorderLink}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        className="inline-block px-2 py-1 rounded-lg bg-blue-700 text-white hover:bg-sky-600"
+                                                    >
+                                                        Reorder
+                                                    </a>
+                                                )}
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

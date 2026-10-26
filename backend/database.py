@@ -27,6 +27,8 @@ class Database:
                         value[field] = str(value[field])
                 if "slot" in value and value["slot"] is not None:
                     value["slot"] = str(value["slot"])
+                if "reorderLink" in value and value["reorderLink"] is not None:
+                    value["reorderLink"] = str(value["reorderLink"])
                 if isinstance(value.get("tags"), list):
                     value["tags"] = [str(tag_id) for tag_id in value["tags"]]
                 value.pop("shelf", None)

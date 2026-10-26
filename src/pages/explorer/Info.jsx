@@ -311,7 +311,10 @@ function Info() {
                         data: {
                             id: formData.get("id").trim(),
                             name: formData.get("name"),
-                            ...(objectType === "item" ? { slot: formData.get("slot") } : {})
+                            ...(objectType === "item" ? {
+                                slot: formData.get("slot"),
+                                reorderLink: formData.get("reorderLink")
+                            } : {})
                         }
                     }).then(() => {
                         window.location.href = `/explorer/${objectType}/${formData.get("id").trim()}`;
@@ -330,6 +333,10 @@ function Info() {
                     {objectType === "item" && <div className="flex flex-row items-center">
                         <label htmlFor="slot">Slot: </label>
                         <input type="text" name="slot" id="slot" defaultValue={obj.slot || ""} />
+                    </div>}
+                    {objectType === "item" && <div className="flex flex-row items-center">
+                        <label htmlFor="reorderLink">Reorder link: </label>
+                        <input type="url" name="reorderLink" id="reorderLink" defaultValue={obj.reorderLink || ""} />
                     </div>}
                     <button type="submit" className="bg-gray-700 p-2 rounded-lg text-white mt-4 hover:bg-sky-600 transition-all duration-300">Update</button>
                 </form>
