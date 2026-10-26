@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 import axios from "axios";
 
 function parseHeaders(csv) {
-    const firstLine = csv.split(/\r?\n/, 1)[0] || "";
+    const firstLine = csv.split(/\r?\n/).find((line) => line.trim()) || "";
+    const delimiter = firstLine.includes("\t") ? "\t" : ",";
     const headers = [];
     let value = "";
     let quoted = false;
@@ -15,7 +16,7 @@ function parseHeaders(csv) {
             } else {
                 quoted = !quoted;
             }
-        } else if (character === "," && !quoted) {
+        } else if (character === delimiter && !quoted) {
             headers.push(value.trim());
             value = "";
         } else {
@@ -23,7 +24,7 @@ function parseHeaders(csv) {
         }
     }
     headers.push(value.trim());
-    return headers.filter(Boolean);
+    return headers.map((header) => header.replace(/^\uFEFF/, "")).filter(Boolean);
 }
 
 export default function BomPage() {
@@ -65,7 +66,7 @@ export default function BomPage() {
             <p className="mb-6 text-gray-700">Paste a bill of materials to see what needs restocking before you pick it.</p>
             <form onSubmit={checkBom} className="flex flex-col gap-4">
                 <label className="flex flex-col gap-1">
-                    CSV data
+                    CSV or TSV data
                     <textarea
                         value={csv}
                         onChange={(event) => updateCsv(event.target.value)}

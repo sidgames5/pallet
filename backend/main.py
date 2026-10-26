@@ -28,23 +28,36 @@ def check_bom():
         return "ID and quantity columns are required", 400
 
     try:
-        rows = csv.DictReader(io.StringIO(csv_text))
+        csv_text = csv_text.lstrip("\ufeff")
+        first_line = next((line for line in csv_text.splitlines() if line.strip()), "")
+        delimiter = "\t" if "\t" in first_line else ","
+        csv_stream = io.StringIO(csv_text)
+        while True:
+            header_position = csv_stream.tell()
+            header_line = csv_stream.readline()
+            if not header_line:
+                break
+            if header_line.strip():
+                csv_stream.seek(header_position)
+                break
+        rows = csv.DictReader(csv_stream, delimiter=delimiter)
         if not rows.fieldnames:
             return "CSV header is required", 400
-        normalized_fields = {field.strip(): field for field in rows.fieldnames if field is not None}
-        if id_column not in normalized_fields or quantity_column not in normalized_fields:
+        normalize_field = lambda field: field.strip().lstrip("\ufeff") if field is not None else ""
+        normalized_fields = {normalize_field(field): field for field in rows.fieldnames if field is not None}
+        normalized_id_column = normalize_field(id_column)
+        normalized_quantity_column = normalize_field(quantity_column)
+        if normalized_id_column not in normalized_fields or normalized_quantity_column not in normalized_fields:
             return "Selected columns were not found in the CSV header", 400
-        id_field = normalized_fields[id_column]
-        quantity_field = normalized_fields[quantity_column]
+        id_field = normalized_fields[normalized_id_column]
+        quantity_field = normalized_fields[normalized_quantity_column]
 
         requirements = {}
         for line_number, row in enumerate(rows, start=2):
             item_id = (row.get(id_field) or "").strip()
             raw_quantity = (row.get(quantity_field) or "").strip()
-            if not item_id and not raw_quantity:
+            if not item_id or not raw_quantity:
                 continue
-            if not item_id:
-                return f"Missing item ID on row {line_number}", 400
             try:
                 quantity = float(raw_quantity)
             except ValueError:
