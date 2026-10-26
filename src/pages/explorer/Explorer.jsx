@@ -25,7 +25,7 @@ function Explorer() {
                     }
                     return v.name.toLowerCase().includes(searchParams.get("q").toLowerCase());
                 });
-                setItems(textFilteredItems);
+                setItems([...textFilteredItems].sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true })));
             } catch (error) {
                 console.error("Error fetching or processing items:", error);
                 setItems([]);
