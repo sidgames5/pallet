@@ -25,10 +25,11 @@ npm run start
 
 ## BOM restock check
 
-Open **Tools → BOM Restock Check**, paste CSV or TSV data, and select the columns
-containing item IDs and required quantities. Pallet combines duplicate item rows
-and compares the total required quantity against current item stock, showing the
-items and quantities that need restocking before the pick can be completed.
+Open **Tools → BOM Restock Check**, paste CSV or TSV data, choose whether to
+search by item ID or name, and select the matching column and required quantity
+column. Pallet combines duplicate item rows and compares the total required
+quantity against current item stock, showing the items and quantities that need
+restocking before the pick can be completed.
 
 ## Data model
 

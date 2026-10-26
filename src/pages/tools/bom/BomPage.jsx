@@ -29,6 +29,7 @@ function parseHeaders(csv) {
 
 export default function BomPage() {
     const [csv, setCsv] = useState("");
+    const [searchBy, setSearchBy] = useState("id");
     const [idColumn, setIdColumn] = useState("");
     const [quantityColumn, setQuantityColumn] = useState("");
     const [result, setResult] = useState(null);
@@ -51,7 +52,7 @@ export default function BomPage() {
         setError("");
         setResult(null);
         try {
-            const response = await axios.post("/api/check-bom", { csv, idColumn, quantityColumn });
+            const response = await axios.post("/api/check-bom", { csv, idColumn, quantityColumn, searchBy });
             setResult(response.data);
         } catch (requestError) {
             setError(requestError.response?.data || "Unable to check the BOM.");
@@ -78,7 +79,14 @@ export default function BomPage() {
                 </label>
                 <div className="flex flex-col md:flex-row gap-4">
                     <label className="flex flex-col gap-1 flex-1">
-                        Item ID column
+                        Search by
+                        <select value={searchBy} onChange={(event) => setSearchBy(event.target.value)} className="p-2 rounded-lg border-2 border-gray-300">
+                            <option value="id">Item ID</option>
+                            <option value="name">Item name</option>
+                        </select>
+                    </label>
+                    <label className="flex flex-col gap-1 flex-1">
+                        {searchBy === "id" ? "Item ID" : "Item name"} column
                         <select value={idColumn} onChange={(event) => setIdColumn(event.target.value)} required className="p-2 rounded-lg border-2 border-gray-300">
                             <option value="" disabled>Select a column</option>
                             {headers.map((header) => <option key={`id-${header}`} value={header}>{header}</option>)}

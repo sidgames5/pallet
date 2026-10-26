@@ -21,11 +21,14 @@ def check_bom():
     csv_text = options.get("csv")
     id_column = options.get("idColumn")
     quantity_column = options.get("quantityColumn")
+    search_by = options.get("searchBy", "id")
 
     if not isinstance(csv_text, str) or not csv_text.strip():
         return "CSV data is required", 400
     if not isinstance(id_column, str) or not isinstance(quantity_column, str):
-        return "ID and quantity columns are required", 400
+        return "Item and quantity columns are required", 400
+    if search_by not in ("id", "name"):
+        return "Search field must be ID or name", 400
 
     try:
         csv_text = csv_text.lstrip("\ufeff")
@@ -68,7 +71,11 @@ def check_bom():
     except csv.Error as error:
         return f"Invalid CSV: {error}", 400
 
-    inventory = {str(item.get("id")): item for item in Database.data.get("items", [])}
+    inventory = {
+        str(item.get(search_by)): item
+        for item in Database.data.get("items", [])
+        if item.get(search_by) is not None
+    }
     restock = []
     for item_id, required in requirements.items():
         item = inventory.get(item_id)
@@ -76,7 +83,7 @@ def check_bom():
         stock = stock if isinstance(stock, (int, float)) and stock >= 0 else 0
         if required > stock:
             restock.append({
-                "id": item_id,
+                "id": str(item.get("id")) if item else item_id,
                 "name": item.get("name", "Unknown item") if item else "Item not found",
                 "required": required,
                 "stock": stock,
